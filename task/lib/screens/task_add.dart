@@ -29,28 +29,30 @@ class _AddTaskState extends State<AddTask> {
         ),
         actions: <Widget>[
           Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  _onSubmit(titleController.text, descriptionController.text);
-                  titleController.clear();
-                  descriptionController.clear();
-                  Navigator.pushNamedAndRemoveUntil(context,'/' , ( route) => false);
-                },
-                child: Icon(
-                  Icons.check,
-                  size: 26.0,
-                ),
-              ),),
+            padding: EdgeInsets.only(right: 20.0),
+            child: GestureDetector(
+              onTap: () {
+                _onSubmit(titleController.text, descriptionController.text);
+                titleController.clear();
+                descriptionController.clear();
+                Navigator.pushNamedAndRemoveUntil(
+                    context, '/', (route) => false);
+              },
+              child: Icon(
+                Icons.check,
+                size: 26.0,
+              ),
+            ),
+          ),
         ],
       ),
       body: Padding(
         padding: EdgeInsets.only(top: 10.0, left: 1.0, right: 1.0),
         child: ListView(
           children: <Widget>[
-        //date time text
+            //date time text
             Padding(
-              padding: EdgeInsets.only( left: 125.0, right: 20.0),
+              padding: EdgeInsets.only(left: 125.0, right: 20.0),
               child: Text(
                 databaseHelper.Dateformatter(),
               ),
@@ -60,10 +62,12 @@ class _AddTaskState extends State<AddTask> {
               padding: EdgeInsets.only(
                   top: 10.0, bottom: 0.0, left: 5.0, right: 5.0),
               child: TextField(
+                autofocus: true,
                 controller: titleController,
                 decoration: InputDecoration(
                   labelText: ' Title',
-                  labelStyle: const TextStyle(fontWeight: FontWeight.w500,fontSize: 17),
+                  labelStyle: const TextStyle(
+                      fontWeight: FontWeight.w500, fontSize: 17),
                   border: InputBorder.none,
                 ),
               ),
