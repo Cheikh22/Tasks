@@ -192,3 +192,14 @@ input_15_1 = {
 
 }
 
+input_16_1 = {
+    "libelle": "Paiement Facture: client RimCash, facturiers",
+    "reference": 'TR 16.1',
+    "journal": journal,
+    "date": date,
+    "montant_paye": 3500,
+    "commission": 70,
+    "taxe": round((70)*POURCENTAGE_TAXE, 2)
+
+}
+

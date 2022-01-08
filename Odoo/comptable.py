@@ -14,13 +14,37 @@ CODE_COMPTE_CLIENT_ORDINAIRE = 2100000002   # Clients RimCash Ordinaire
 CODE_COMPTE_CLIENT_PRO = 2100000003         # Clients RimCash Pro
 CODE_COMPTE_CLIENT_OCCASIONNELS = 2100000004   # Clients occansionnels
 CODE_COMPTE_CLIENT_COMMERCANTS = 2100000005   # Clients commerçant
-CODE_COMPTE_COMMISSION = 7029000001  # Commissions RimCash / transfert d'argents
 CODE_COMPTE_AGENCE_PARTENAIRE = 2100000006  # Agence partenaire
+
 CODE_COMPTE_TAXE = 3230000001  # Taxes sur les opérations financieres
 CODE_COMPTE_CAISSE_AGENCES_RIMASH = 1000001001 #Caisses Agences RimCash
 CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE = 1000002001 #Caisses Agences Partenaires
 CODE_COMPTE_ESPERCES = 101501   # Espèces
 CODE_COMPTE_FACTURIERS = 2100000008   #  Facturiers
+
+CODE_COMPTE_COMMISSION = 7029000001  # Commissions RimCash / transfert d'argents
+CODE_COMPTE_COMMISSION_RETRAIT = 7029001001   #  Commissions  RimCash / Retrait d'argents
+CODE_COMPTE_COMMISSION_ACHAT_BIEN = 7029003001   #  Commissions  RimCash / Achat du bien
+CODE_COMPTE_COMMISSION_ACHAT_BIEN_ECOMMERCE = 7029003002   #  Commissions  RimCash / Achat du bien E-commerce
+CODE_COMPTE_COMMISSION_FACTURIER = 7029005001   #  Commissions  RimCash / paiement facturier
+CODE_COMPTE_COMMISSION_VERSEMENT = 7029002001   #  Commissions  RimCash / versement d'argents
+
+CODE_COMPTE_MARGE_MAURITEL = 7029006001   #  Marge / vente carte de recharge Mauritel
+CODE_COMPTE_MARGE_MATTEL = 7029006002   #  Marge / vente carte de recharge Mattel
+CODE_COMPTE_MARGE_CHINGUITEL = 7029006003   #  Marge / vente carte de recharge Chinguitel
+ 
+CODE_COMPTE_STOCK_CR_MAURITEL = 3500000001  #Stock carte de recharge Mauritel
+CODE_COMPTE_STOCK_CR_MATTEL = 3500000002  #Stock carte de recharge Mattel
+CODE_COMPTE_STOCK_CR_CHINGUITEL = 3500000003  #Stock carte de recharge Chinguitel
+
+ 
+
+
+POURCENTAGE_MARGE_MAURITEL = 0.10
+POURCENTAGE_MARGE_MATTEL = 0.10
+POURCENTAGE_MARGE_CHINGUITEL = 0.10
+
+
 
 POURCENTAGE_TAXE = 0.14  # La taxe est fixée à 14% de la commission
 
@@ -391,7 +415,7 @@ def ecriture_comptable_1_1(reference, date, journal, libelle, valeur_nette_du_tr
 def ecriture_comptable_5_1(reference, date, journal, libelle, valeur_nette_du_retrait, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_ESPERCES)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
-    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_RETRAIT)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
 
     transaction = {
@@ -414,7 +438,7 @@ def ecriture_comptable_5_1(reference, date, journal, libelle, valeur_nette_du_re
 def ecriture_comptable_7_1(reference, date, journal, libelle, montant_alimentation, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
-    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_VERSEMENT)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
 
     transaction = {
@@ -437,7 +461,7 @@ def ecriture_comptable_7_1(reference, date, journal, libelle, montant_alimentati
 def ecriture_comptable_9_1(reference, date, journal, libelle, valeur_du_bien, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_COMMERCANTS)])[0]
-    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_ACHAT_BIEN)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
 
     transaction = {
@@ -460,7 +484,7 @@ def ecriture_comptable_9_1(reference, date, journal, libelle, valeur_du_bien, co
 def ecriture_comptable_11_1(reference, date, journal, libelle, valeur_du_bien, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_COMMERCANTS)])[0]
-    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_ACHAT_BIEN)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
 
     transaction = {
@@ -482,7 +506,7 @@ def ecriture_comptable_11_1(reference, date, journal, libelle, valeur_du_bien, c
 def ecriture_comptable_13_1(reference, date, journal, libelle, valeur_du_bien, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_COMMERCANTS)])[0]
-    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_ACHAT_BIEN_ECOMMERCE)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
 
     transaction = {
@@ -504,8 +528,30 @@ def ecriture_comptable_13_1(reference, date, journal, libelle, valeur_du_bien, c
 
 def ecriture_comptable_15_1(reference, date, journal, libelle, montant_de_vente,cout_achat, margeRimCash=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
-    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_COMMERCANTS)])[0]
-    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_STOCK_CR_MAURITEL)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_MARGE_MAURITEL)])[0]
+    compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
+
+    transaction = {
+        'ref': reference,
+        'date': date,
+        'journal_id': journal,
+        'line_ids': [
+            (0, 0, {'debit': 0, 'credit': montant_de_vente , 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': cout_achat, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
+            (0, 0, {'debit': margeRimCash, 'credit': 0,'account_id': compte_commision, 'name': libelle}),
+            (0, 0, {'debit': taxe, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
+        ]
+    }
+    return transaction
+
+
+# Ecriture comptable 15.2
+
+def ecriture_comptable_15_2(reference, date, journal, libelle, montant_de_vente,cout_achat, margeRimCash=0, taxe=0):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_STOCK_CR_MATTEL)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_MARGE_MATTEL)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
 
     transaction = {
@@ -523,12 +569,12 @@ def ecriture_comptable_15_1(reference, date, journal, libelle, montant_de_vente,
 
 
 
-# Ecriture comptable 15.2
+# Ecriture comptable 15.3
 
-def ecriture_comptable_15_2(reference, date, journal, libelle, montant_de_vente,cout_achat, margeRimCash=0, taxe=0):
+def ecriture_comptable_15_3(reference, date, journal, libelle, montant_de_vente,cout_achat, margeRimCash=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
-    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_COMMERCANTS)])[0]
-    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_STOCK_CR_CHINGUITEL)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_MARGE_CHINGUITEL)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
 
     transaction = {
@@ -552,7 +598,7 @@ def ecriture_comptable_15_2(reference, date, journal, libelle, montant_de_vente,
 def ecriture_comptable_16_1(reference, date, journal, libelle, montant_paye, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_FACTURIERS)])[0]
-    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_FACTURIER)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
 
     transaction = {
@@ -608,19 +654,21 @@ date = '08-01-2022'
 date = transform_date_form(date)
 
 
-input_16_1 = {
-    "libelle": "Paiement Facture: client RimCash, facturiers",
-    "reference": 'TR 16.1',
+input_15_1 = {
+    "libelle": "Paiement de carte: par client RimCash",
+    "reference": 'TR 15.3',
     "journal": journal,
     "date": date,
-    "montant_paye": 3500,
-    "commission": 70,
-    "taxe": round((70)*POURCENTAGE_TAXE, 2)
+    "montant_de_vente": 50,
+    "cout_achat": 47,
+    "margeRimCash": 3,
+    "taxe": round((0)*POURCENTAGE_TAXE, 2)
 
 }
 
 
-transaction = ecriture_comptable_16_1(**input_16_1)
+
+transaction = ecriture_comptable_15_1(**input_15_1)
 
 
 # Ajout des pièces comptables
