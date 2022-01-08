@@ -79,3 +79,116 @@ input_2_3 = {
     "taxe": round((50+30+20)*POURCENTAGE_TAXE, 2)
 
 }
+
+input_3_1 = {
+    "libelle": "Transfert: client occasionnel 44554411 client ordinaire 37486414 vers",
+    "reference": 'TR 3.1',
+    "journal": journal,
+    "date": date,
+    "valeur_nette_du_transfert": 1000,
+    "commission": 50,
+    "taxe": round((50)*POURCENTAGE_TAXE, 2)
+
+}
+
+input_3_2 = {
+    "libelle": "Transfert: client occasionnel 44554411 client ordinaire 37486414 vers",
+    "reference": 'TR 3.2',
+    "journal": journal,
+    "date": date,
+    "valeur_nette_du_transfert": 1000,
+    "commission": 50,
+    "commission_partenaire_recepteur": 30,
+    "taxe": round((50+30)*POURCENTAGE_TAXE, 2)
+
+}
+
+
+input_4_1 = {
+    "libelle": "Transfert: client occasionnel 44554411 client vers occasionnels 37486414 ",
+    "reference": 'TR 4.1',
+    "journal": journal,
+    "date": date,
+    "valeur_nette_du_transfert": 1000,
+    "commission": 50,
+    "taxe": round((50)*POURCENTAGE_TAXE, 2)
+
+}
+
+input_4_2 = {
+    "libelle": "Transfert: client occasionnel 44554411 client vers occasionnels 37486414 ",
+    "reference": 'TR 4.2',
+    "journal": journal,
+    "date": date,
+    "valeur_nette_du_transfert": 1000,
+    "commission": 50,
+    "commission_partenaire_recepteur": 30,
+    "taxe": round((50+30)*POURCENTAGE_TAXE, 2)
+
+}
+
+input_5_1 = {
+    "libelle": "Retrait: client ordinaire 37486414 du caisse RimCash",
+    "reference": 'TR 5.1',
+    "journal": journal,
+    "date": date,
+    "valeur_nette_du_retrait": 1000,
+    "commission": 50,
+    "taxe": round((50)*POURCENTAGE_TAXE, 2)
+
+}
+
+input_7_1 = {
+    "libelle": "Alimentation: client ordinaire , du caisse RimCash",
+    "reference": 'TR 7.1',
+    "journal": journal,
+    "date": date,
+    "montant_alimentation": 500,
+    "commission": 20,
+    "taxe": round((20)*POURCENTAGE_TAXE, 2)
+
+}
+
+input_9_1 = {
+    "libelle": "Paiement: client ordinaire , client commerçant",
+    "reference": 'TR 9.1',
+    "journal": journal,
+    "date": date,
+    "valeur_du_bien": 400,
+    "commission": 60,
+    "taxe": round((60)*POURCENTAGE_TAXE, 2)
+
+}
+input_11_1 = {
+    "libelle": "Paiement classique: client RimCash, commerçant RimCash",
+    "reference": 'TR 11.1',
+    "journal": journal,
+    "date": date,
+    "valeur_du_bien": 400,
+    "commission": 60,
+    "taxe": round((60)*POURCENTAGE_TAXE, 2)
+
+}
+input_13_1 = {
+    "libelle": "Paiement Ecommerce: client RimCash, commerçant RimCash",
+    "reference": 'TR 13.1',
+    "journal": journal,
+    "date": date,
+    "valeur_du_bien": 400,
+    "commission": 40,
+    "taxe": round((40)*POURCENTAGE_TAXE, 2)
+
+}
+
+input_15_1 = {
+    "libelle": "Paiement de carte: par client RimCash",
+    "reference": 'TR 15.1',
+    "journal": journal,
+    "date": date,
+    "montant_de_vente": 50,
+    "cout_achat": 47,
+    "margeRimCash": 3,
+    "taxe": round((0)*POURCENTAGE_TAXE, 2)
+
+}
+
