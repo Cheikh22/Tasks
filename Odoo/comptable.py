@@ -413,7 +413,7 @@ def ecriture_comptable_1_1(reference, date, journal, libelle, valeur_nette_du_tr
 # Ecriture comptable 5.1
 
 def ecriture_comptable_5_1(reference, date, journal, libelle, valeur_nette_du_retrait, commission=0, taxe=0):
-    compte_origine = account_model.search([('code', '=', CODE_COMPTE_ESPERCES)])[0]
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
     compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_RETRAIT)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
@@ -718,10 +718,21 @@ input_15_1 = {
     "taxe": round((3)*POURCENTAGE_TAXE, 2)
 
 }
+input_16_1 = {
+    "libelle": "Paiement Facture: client RimCash, facturiers",
+    "reference": 'TR 16.1',
+    "journal": journal,
+    "date": date,
+    "montant_paye": 3500,
+    "commission": 70,
+    "taxe": round((70)*POURCENTAGE_TAXE, 2)
+
+}
 
 
 
-transaction = ecriture_comptable_15_1(**input_15_1)
+
+transaction = ecriture_comptable_16_1(**input_16_1)
 
 
 # Ajout des pièces comptables

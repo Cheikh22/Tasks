@@ -180,18 +180,6 @@ input_13_1 = {
 
 }
 
-input_15_1 = {
-    "libelle": "Paiement de carte: par client RimCash",
-    "reference": 'TR 15.1',
-    "journal": journal,
-    "date": date,
-    "montant_de_vente": 50,
-    "cout_achat": 47,
-    "margeRimCash": 3,
-    "taxe": round((3)*POURCENTAGE_TAXE, 2)
-
-}
-
 input_16_1 = {
     "libelle": "Paiement Facture: client RimCash, facturiers",
     "reference": 'TR 16.1',
