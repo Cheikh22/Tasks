@@ -188,7 +188,7 @@ input_15_1 = {
     "montant_de_vente": 50,
     "cout_achat": 47,
     "margeRimCash": 3,
-    "taxe": round((0)*POURCENTAGE_TAXE, 2)
+    "taxe": round((3)*POURCENTAGE_TAXE, 2)
 
 }
 

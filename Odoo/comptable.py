@@ -524,7 +524,7 @@ def ecriture_comptable_13_1(reference, date, journal, libelle, valeur_du_bien, c
 
 
 
-# Ecriture comptable 15.1
+# Ecriture comptable 15.1 Mauritel
 
 def ecriture_comptable_15_1(reference, date, journal, libelle, montant_de_vente,cout_achat, margeRimCash=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
@@ -539,14 +539,14 @@ def ecriture_comptable_15_1(reference, date, journal, libelle, montant_de_vente,
         'line_ids': [
             (0, 0, {'debit': 0, 'credit': montant_de_vente , 'account_id': compte_origine, 'name': libelle}),
             (0, 0, {'debit': cout_achat, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
-            (0, 0, {'debit': margeRimCash, 'credit': 0,'account_id': compte_commision, 'name': libelle}),
+            (0, 0, {'debit': margeRimCash-taxe, 'credit': 0,'account_id': compte_commision, 'name': libelle}),
             (0, 0, {'debit': taxe, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
         ]
     }
     return transaction
 
 
-# Ecriture comptable 15.2
+# Ecriture comptable 15.2 Mattel
 
 def ecriture_comptable_15_2(reference, date, journal, libelle, montant_de_vente,cout_achat, margeRimCash=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
@@ -561,7 +561,7 @@ def ecriture_comptable_15_2(reference, date, journal, libelle, montant_de_vente,
         'line_ids': [
             (0, 0, {'debit': 0, 'credit': montant_de_vente , 'account_id': compte_origine, 'name': libelle}),
             (0, 0, {'debit': cout_achat, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
-            (0, 0, {'debit': margeRimCash, 'credit': 0,'account_id': compte_commision, 'name': libelle}),
+            (0, 0, {'debit': margeRimCash-taxe, 'credit': 0,'account_id': compte_commision, 'name': libelle}),
             (0, 0, {'debit': taxe, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
         ]
     }
@@ -569,7 +569,7 @@ def ecriture_comptable_15_2(reference, date, journal, libelle, montant_de_vente,
 
 
 
-# Ecriture comptable 15.3
+# Ecriture comptable 15.3 Chinguitel
 
 def ecriture_comptable_15_3(reference, date, journal, libelle, montant_de_vente,cout_achat, margeRimCash=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
@@ -584,7 +584,7 @@ def ecriture_comptable_15_3(reference, date, journal, libelle, montant_de_vente,
         'line_ids': [
             (0, 0, {'debit': 0, 'credit': montant_de_vente , 'account_id': compte_origine, 'name': libelle}),
             (0, 0, {'debit': cout_achat, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
-            (0, 0, {'debit': margeRimCash, 'credit': 0,'account_id': compte_commision, 'name': libelle}),
+            (0, 0, {'debit': margeRimCash-taxe, 'credit': 0,'account_id': compte_commision, 'name': libelle}),
             (0, 0, {'debit': taxe, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
         ]
     }
@@ -654,15 +654,68 @@ date = '08-01-2022'
 date = transform_date_form(date)
 
 
+input_5_1 = {
+    "libelle": "Retrait: client ordinaire 37486414 du caisse RimCash",
+    "reference": 'TR 5.1',
+    "journal": journal,
+    "date": date,
+    "valeur_nette_du_retrait": 1000,
+    "commission": 50,
+    "taxe": round((50)*POURCENTAGE_TAXE, 2)
+
+}
+
+input_7_1 = {
+    "libelle": "Alimentation: client ordinaire , du caisse RimCash",
+    "reference": 'TR 7.1',
+    "journal": journal,
+    "date": date,
+    "montant_alimentation": 500,
+    "commission": 20,
+    "taxe": round((20)*POURCENTAGE_TAXE, 2)
+
+}
+
+input_9_1 = {
+    "libelle": "Paiement: client ordinaire , client commerçant",
+    "reference": 'TR 9.1',
+    "journal": journal,
+    "date": date,
+    "valeur_du_bien": 400,
+    "commission": 60,
+    "taxe": round((60)*POURCENTAGE_TAXE, 2)
+
+}
+input_11_1 = {
+    "libelle": "Paiement classique: client RimCash, commerçant RimCash",
+    "reference": 'TR 11.1',
+    "journal": journal,
+    "date": date,
+    "valeur_du_bien": 400,
+    "commission": 60,
+    "taxe": round((60)*POURCENTAGE_TAXE, 2)
+
+}
+input_13_1 = {
+    "libelle": "Paiement Ecommerce: client RimCash, commerçant RimCash",
+    "reference": 'TR 13.1',
+    "journal": journal,
+    "date": date,
+    "valeur_du_bien": 400,
+    "commission": 40,
+    "taxe": round((40)*POURCENTAGE_TAXE, 2)
+
+}
+
 input_15_1 = {
     "libelle": "Paiement de carte: par client RimCash",
-    "reference": 'TR 15.3',
+    "reference": 'TR 15.1',
     "journal": journal,
     "date": date,
     "montant_de_vente": 50,
     "cout_achat": 47,
     "margeRimCash": 3,
-    "taxe": round((0)*POURCENTAGE_TAXE, 2)
+    "taxe": round((3)*POURCENTAGE_TAXE, 2)
 
 }
 
