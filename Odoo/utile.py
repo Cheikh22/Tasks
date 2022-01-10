@@ -179,6 +179,17 @@ input_13_1 = {
     "taxe": round((40)*POURCENTAGE_TAXE, 2)
 
 }
+input_15_1 = {
+    "libelle": "Paiement de carte: par client RimCash",
+    "reference": 'TR 15.1',
+    "journal": journal,
+    "date": date,
+    "montant_de_vente": 50,
+    "cout_achat": 47,
+    "margeRimCash": 3,
+    "taxe": round((3)*POURCENTAGE_TAXE, 2)
+
+}
 
 input_16_1 = {
     "libelle": "Paiement Facture: client RimCash, facturiers",
@@ -188,6 +199,27 @@ input_16_1 = {
     "montant_paye": 3500,
     "commission": 70,
     "taxe": round((70)*POURCENTAGE_TAXE, 2)
+
+}
+
+input_20_1 = {
+    "libelle": "Transfert: client pro 37486414 vers multiple clients ordinaire",
+    "reference": 'TR 20.1',
+    "journal": journal,
+    "date": date,
+    "valeur_nette_du_transfert": 1000,
+    "commission": 50,
+    "taxe": round(50*POURCENTAGE_TAXE, 2)
+
+}
+input_21_1 = {
+    "libelle": "depot cagnotte: clients ordinaire depot dans une cagnotte",
+    "reference": 'TR 21.1',
+    "journal": journal,
+    "date": date,
+    "valeur_de_depot": 1000,
+    "commission": 50,
+    "taxe": round(50*POURCENTAGE_TAXE, 2)
 
 }
 

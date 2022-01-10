@@ -15,19 +15,26 @@ CODE_COMPTE_CLIENT_PRO = 2100000003         # Clients RimCash Pro
 CODE_COMPTE_CLIENT_OCCASIONNELS = 2100000004   # Clients occansionnels
 CODE_COMPTE_CLIENT_COMMERCANTS = 2100000005   # Clients commerçant
 CODE_COMPTE_AGENCE_PARTENAIRE = 2100000006  # Agence partenaire
+CODE_COMPTE_FACTURIERS = 2100000008   #  Facturiers
 
 CODE_COMPTE_TAXE = 3230000001  # Taxes sur les opérations financieres
 CODE_COMPTE_CAISSE_AGENCES_RIMASH = 1000001001 #Caisses Agences RimCash
 CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE = 1000002001 #Caisses Agences Partenaires
 CODE_COMPTE_ESPERCES = 101501   # Espèces
-CODE_COMPTE_FACTURIERS = 2100000008   #  Facturiers
+CODE_COMPTE_CAGNOTTE = 2160000001   # Cagnotte
+
+
+
 
 CODE_COMPTE_COMMISSION = 7029000001  # Commissions RimCash / transfert d'argents
+CODE_COMPTE_COMMISSION_MULTIPLE = 7029000002  # Commissions RimCash / transfert multiple
 CODE_COMPTE_COMMISSION_RETRAIT = 7029001001   #  Commissions  RimCash / Retrait d'argents
 CODE_COMPTE_COMMISSION_ACHAT_BIEN = 7029003001   #  Commissions  RimCash / Achat du bien
 CODE_COMPTE_COMMISSION_ACHAT_BIEN_ECOMMERCE = 7029003002   #  Commissions  RimCash / Achat du bien E-commerce
 CODE_COMPTE_COMMISSION_FACTURIER = 7029005001   #  Commissions  RimCash / paiement facturier
 CODE_COMPTE_COMMISSION_VERSEMENT = 7029002001   #  Commissions  RimCash / versement d'argents
+CODE_COMPTE_COMMISSION_DEPOT_CAGNOTTE = 7029004001   #  Commissions RimCash / Depot dans une cagnotte
+
 
 CODE_COMPTE_MARGE_MAURITEL = 7029006001   #  Marge / vente carte de recharge Mauritel
 CODE_COMPTE_MARGE_MATTEL = 7029006002   #  Marge / vente carte de recharge Mattel
@@ -58,15 +65,12 @@ def transform_date_form(old_date):
     return '-'.join(new_date)
 
 
-# Ecriture comptable 1.1
+# Ecriture comptable 1.1     Transfert de montant entre deux clients RimCash		
 
 def ecriture_comptable_1_1(reference, date, journal, libelle, valeur_nette_du_transfert, commission=0, taxe=0):
-    compte_origine = account_model.search(
-        [('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
-    compte_beneficiaire = account_model.search(
-        [('code', '=', CODE_COMPTE_CLIENT_PRO)])[0]
-    compte_commision = account_model.search(
-        [('code', '=', CODE_COMPTE_COMMISSION)])[0]
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_PRO)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
 
     transaction = {
@@ -410,7 +414,7 @@ def ecriture_comptable_1_1(reference, date, journal, libelle, valeur_nette_du_tr
 #     return transaction
 
 
-# Ecriture comptable 5.1
+# Ecriture comptable 5.1      Retrait d'espèces via une agence par un client Rimcash
 
 def ecriture_comptable_5_1(reference, date, journal, libelle, valeur_nette_du_retrait, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
@@ -433,7 +437,7 @@ def ecriture_comptable_5_1(reference, date, journal, libelle, valeur_nette_du_re
 
 
 
-# Ecriture comptable 7.1
+# Ecriture comptable 7.1    Alimentation du solde client Rimcash via une agence 
 
 def ecriture_comptable_7_1(reference, date, journal, libelle, montant_alimentation, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
@@ -456,7 +460,7 @@ def ecriture_comptable_7_1(reference, date, journal, libelle, montant_alimentati
 
 
 
-# Ecriture comptable 9.1
+# Ecriture comptable 9.1      Paiement sur la demande d'un commerçant RimCash par un client RimCash
 
 def ecriture_comptable_9_1(reference, date, journal, libelle, valeur_du_bien, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
@@ -479,7 +483,7 @@ def ecriture_comptable_9_1(reference, date, journal, libelle, valeur_du_bien, co
 
 
 
-# Ecriture comptable 11.1
+# Ecriture comptable 11.1     Paiement classique à commerçant RimCash par un client RimCash
 
 def ecriture_comptable_11_1(reference, date, journal, libelle, valeur_du_bien, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
@@ -501,7 +505,7 @@ def ecriture_comptable_11_1(reference, date, journal, libelle, valeur_du_bien, c
     return transaction
 
 
-# Ecriture comptable 13.1
+# Ecriture comptable 13.1     Paiement E-commerce à commerçant RimCash par un client RimCash
 
 def ecriture_comptable_13_1(reference, date, journal, libelle, valeur_du_bien, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
@@ -524,7 +528,7 @@ def ecriture_comptable_13_1(reference, date, journal, libelle, valeur_du_bien, c
 
 
 
-# Ecriture comptable 15.1 Mauritel
+# Ecriture comptable 15.1    Paiement de carte téléphonique par un client RimCash Mauritel
 
 def ecriture_comptable_15_1(reference, date, journal, libelle, montant_de_vente,cout_achat, margeRimCash=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
@@ -546,7 +550,7 @@ def ecriture_comptable_15_1(reference, date, journal, libelle, montant_de_vente,
     return transaction
 
 
-# Ecriture comptable 15.2 Mattel
+# Ecriture comptable 15.2     Paiement de carte téléphonique par un client RimCash Mattel
 
 def ecriture_comptable_15_2(reference, date, journal, libelle, montant_de_vente,cout_achat, margeRimCash=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
@@ -569,7 +573,7 @@ def ecriture_comptable_15_2(reference, date, journal, libelle, montant_de_vente,
 
 
 
-# Ecriture comptable 15.3 Chinguitel
+# Ecriture comptable 15.3      Paiement de carte téléphonique par un client RimCashChinguitel
 
 def ecriture_comptable_15_3(reference, date, journal, libelle, montant_de_vente,cout_achat, margeRimCash=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
@@ -593,7 +597,7 @@ def ecriture_comptable_15_3(reference, date, journal, libelle, montant_de_vente,
 
 
 
-# Ecriture comptable 16.1
+# Ecriture comptable 16.1     Paiement de facture par un client RimCash à un facturier
 
 def ecriture_comptable_16_1(reference, date, journal, libelle, montant_paye, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
@@ -615,6 +619,75 @@ def ecriture_comptable_16_1(reference, date, journal, libelle, montant_paye, com
     return transaction
 
 
+
+
+# Ecriture comptable 20.1     Paiement de plusieurs clients RimCash par un client RimCash Pro (Entreprise) 
+
+def ecriture_comptable_20_1(reference, date, journal, libelle, valeur_nette_du_transfert,commission_multiple=0, commission=0,taxe_multiple=0, taxe=0):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_PRO)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
+    compte_commision_multiple = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_MULTIPLE)])[0]
+    compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
+
+    transaction = {
+        'ref': reference,
+        'date': date,
+        'journal_id': journal,
+        'line_ids': [
+            (0, 0, {'debit': 0, 'credit': valeur_nette_du_transfert +commission_multiple+taxe_multiple, 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': valeur_nette_du_transfert, 'credit': commission,'account_id': compte_beneficiaire, 'name': libelle}),
+            (0, 0, {'debit': commission_multiple, 'credit': 0,'account_id': compte_commision_multiple, 'name': libelle}),
+            (0, 0, {'debit': taxe_multiple, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
+        ]
+    }
+    return transaction
+
+
+
+# Ecriture comptable 21.1     Dépôt de montant par un client RimCash dans une cagnotte
+
+def ecriture_comptable_21_1(reference, date, journal, libelle, valeur_de_depot, commission=0, taxe=0):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAGNOTTE)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
+    compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
+
+    transaction = {
+        'ref': reference,
+        'date': date,
+        'journal_id': journal,
+        'line_ids': [
+            (0, 0, {'debit': 0, 'credit': valeur_de_depot +commission+taxe, 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': valeur_de_depot, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
+            (0, 0, {'debit': commission, 'credit': 0,'account_id': compte_commision, 'name': libelle}),
+            (0, 0, {'debit': taxe, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
+        ]
+    }
+    return transaction
+
+
+
+# Ecriture comptable 22.1     Transfert du solde de la cagnotte vers un client RimCash
+
+def ecriture_comptable_22_1(reference, date, journal, libelle, solde_cagnotte, commission=0, taxe=0):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAGNOTTE)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
+    compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
+
+    transaction = {
+        'ref': reference,
+        'date': date,
+        'journal_id': journal,
+        'line_ids': [
+            (0, 0, {'debit': 0, 'credit': solde_cagnotte, 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': solde_cagnotte-commission-taxe, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
+            (0, 0, {'debit': commission, 'credit': 0,'account_id': compte_commision, 'name': libelle}),
+            (0, 0, {'debit': taxe, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
+        ]
+    }
+    return transaction
 
 
 
@@ -654,85 +727,21 @@ date = '08-01-2022'
 date = transform_date_form(date)
 
 
-input_5_1 = {
-    "libelle": "Retrait: client ordinaire 37486414 du caisse RimCash",
-    "reference": 'TR 5.1',
+input_21_1 = {
+    "libelle": "depot cagnotte: clients ordinaire depot dans une cagnotte",
+    "reference": 'TR 21.1',
     "journal": journal,
     "date": date,
-    "valeur_nette_du_retrait": 1000,
+    "valeur_de_depot": 1000,
     "commission": 50,
-    "taxe": round((50)*POURCENTAGE_TAXE, 2)
-
-}
-
-input_7_1 = {
-    "libelle": "Alimentation: client ordinaire , du caisse RimCash",
-    "reference": 'TR 7.1',
-    "journal": journal,
-    "date": date,
-    "montant_alimentation": 500,
-    "commission": 20,
-    "taxe": round((20)*POURCENTAGE_TAXE, 2)
-
-}
-
-input_9_1 = {
-    "libelle": "Paiement: client ordinaire , client commerçant",
-    "reference": 'TR 9.1',
-    "journal": journal,
-    "date": date,
-    "valeur_du_bien": 400,
-    "commission": 60,
-    "taxe": round((60)*POURCENTAGE_TAXE, 2)
-
-}
-input_11_1 = {
-    "libelle": "Paiement classique: client RimCash, commerçant RimCash",
-    "reference": 'TR 11.1',
-    "journal": journal,
-    "date": date,
-    "valeur_du_bien": 400,
-    "commission": 60,
-    "taxe": round((60)*POURCENTAGE_TAXE, 2)
-
-}
-input_13_1 = {
-    "libelle": "Paiement Ecommerce: client RimCash, commerçant RimCash",
-    "reference": 'TR 13.1',
-    "journal": journal,
-    "date": date,
-    "valeur_du_bien": 400,
-    "commission": 40,
-    "taxe": round((40)*POURCENTAGE_TAXE, 2)
-
-}
-
-input_15_1 = {
-    "libelle": "Paiement de carte: par client RimCash",
-    "reference": 'TR 15.1',
-    "journal": journal,
-    "date": date,
-    "montant_de_vente": 50,
-    "cout_achat": 47,
-    "margeRimCash": 3,
-    "taxe": round((3)*POURCENTAGE_TAXE, 2)
-
-}
-input_16_1 = {
-    "libelle": "Paiement Facture: client RimCash, facturiers",
-    "reference": 'TR 16.1',
-    "journal": journal,
-    "date": date,
-    "montant_paye": 3500,
-    "commission": 70,
-    "taxe": round((70)*POURCENTAGE_TAXE, 2)
+    "taxe": round(50*POURCENTAGE_TAXE, 2)
 
 }
 
 
 
 
-transaction = ecriture_comptable_16_1(**input_16_1)
+transaction = ecriture_comptable_21_1(**input_21_1)
 
 
 # Ajout des pièces comptables
