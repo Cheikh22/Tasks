@@ -1,3 +1,4 @@
+from bmi_db_2 import CODE_COMPTE_CLIENT_ORDINAIRE
 from comptable import journal,POURCENTAGE_TAXE
 
 def transform_date_form(old_date):
@@ -10,7 +11,7 @@ date = '08-01-2022'
 date = transform_date_form(date)
 
 input_1_1 = {
-    "libelle": "Transfert: client ordinaire 37486414 vers client PRO 27777732",
+    "libelle": "Transfert: client ordinaire  vers client PRO ",
     "reference": 'TR 1.1',
     "journal": journal,
     "date": date,
@@ -21,7 +22,7 @@ input_1_1 = {
 }
 
 input_1_2 = {
-    "libelle": "Transfert: client ordinaire 37486414 vers agence partenaire",
+    "libelle": "Transfert: client ordinaire vers agence partenaire",
     "reference": 'TR 1.2',
     "journal": journal,
     "date": date,
@@ -46,7 +47,7 @@ input_1_3 = {
 }
 
 input_2_1 = {
-    "libelle": "Transfert: client ordinaire 37486414 vers client occasionnel 44554411",
+    "libelle": "Transfert: client ordinaire vers client occasionnel",
     "reference": 'TR 2.1',
     "journal": journal,
     "date": date,
@@ -57,7 +58,7 @@ input_2_1 = {
 }
 
 input_2_2 = {
-    "libelle": "Transfert: client ordinaire 37486414 vers client occasionnel 44554411",
+    "libelle": "Transfert: client ordinaire vers client occasionnel ",
     "reference": 'TR 2.2',
     "journal": journal,
     "date": date,
@@ -68,7 +69,7 @@ input_2_2 = {
 
 }
 input_2_3 = {
-    "libelle": "Transfert: client ordinaire 37486414 vers client occasionnel 44554411",
+    "libelle": "Transfert: client ordinaire vers client occasionnel",
     "reference": 'TR 2.3',
     "journal": journal,
     "date": date,
@@ -81,7 +82,7 @@ input_2_3 = {
 }
 
 input_3_1 = {
-    "libelle": "Transfert: client occasionnel 44554411 client ordinaire 37486414 vers",
+    "libelle": "Transfert: client occasionnel client ordinaire vers",
     "reference": 'TR 3.1',
     "journal": journal,
     "date": date,
@@ -92,7 +93,7 @@ input_3_1 = {
 }
 
 input_3_2 = {
-    "libelle": "Transfert: client occasionnel 44554411 client ordinaire 37486414 vers",
+    "libelle": "Transfert: client occasionnel client ordinaire vers",
     "reference": 'TR 3.2',
     "journal": journal,
     "date": date,
@@ -105,7 +106,7 @@ input_3_2 = {
 
 
 input_4_1 = {
-    "libelle": "Transfert: client occasionnel 44554411 client vers occasionnels 37486414 ",
+    "libelle": "Transfert: client occasionnel client vers occasionnels  ",
     "reference": 'TR 4.1',
     "journal": journal,
     "date": date,
@@ -116,7 +117,7 @@ input_4_1 = {
 }
 
 input_4_2 = {
-    "libelle": "Transfert: client occasionnel 44554411 client vers occasionnels 37486414 ",
+    "libelle": "Transfert: client occasionnel  client vers occasionnels  ",
     "reference": 'TR 4.2',
     "journal": journal,
     "date": date,
@@ -128,7 +129,7 @@ input_4_2 = {
 }
 
 input_5_1 = {
-    "libelle": "Retrait: client ordinaire 37486414 du caisse RimCash",
+    "libelle": "Retrait: client ordinaire  du caisse RimCash",
     "reference": 'TR 5.1',
     "journal": journal,
     "date": date,
@@ -136,6 +137,16 @@ input_5_1 = {
     "commission": 50,
     "taxe": round((50)*POURCENTAGE_TAXE, 2)
 
+}
+
+input_6_1 = {
+    "libelle": "Retrait: client commerçant  du caisse RimCash",
+    "reference": 'TR 6.1',
+    "journal": journal,
+    "date": date,
+    "valeur_nette_du_retrait": 1000,
+    "commission": 50,
+    "taxe": round((50)*POURCENTAGE_TAXE, 2)
 }
 
 input_7_1 = {
@@ -203,14 +214,16 @@ input_16_1 = {
 }
 
 input_20_1 = {
-    "libelle": "Transfert: client pro 37486414 vers multiple clients ordinaire",
+    "libelle": "Transfert: client pro vers multiple clients ordinaire",
     "reference": 'TR 20.1',
     "journal": journal,
     "date": date,
-    "valeur_nette_du_transfert": 1000,
-    "commission": 50,
-    "taxe": round(50*POURCENTAGE_TAXE, 2)
-
+    "valeur_nette_du_transfert": 20000,
+    "commission_multiple": 150,
+    "taxe_multiple": round(150*POURCENTAGE_TAXE, 2),
+    "employes":[
+        [CODE_COMPTE_CLIENT_ORDINAIRE,5000,45],[CODE_COMPTE_CLIENT_ORDINAIRE,7000,60],[CODE_COMPTE_CLIENT_ORDINAIRE,9000,75]
+    ]
 }
 input_21_1 = {
     "libelle": "depot cagnotte: clients ordinaire depot dans une cagnotte",
@@ -220,6 +233,25 @@ input_21_1 = {
     "valeur_de_depot": 1000,
     "commission": 50,
     "taxe": round(50*POURCENTAGE_TAXE, 2)
-
 }
 
+input_22_1 = {
+    "libelle": "Transfert: cagnotte vers clients ordinaire ",
+    "reference": 'TR 22.1',
+    "journal": journal,
+    "date": date,
+    "solde_de_cagnotte": 4000,
+    "commission": 50,
+    "taxe": round(50*POURCENTAGE_TAXE, 2)
+}
+
+input_25_1 = {
+    "libelle": "Transfert: cagnotte vers multiple clients ordinaire",
+    "reference": 'TR 25.1',
+    "journal": journal,
+    "date": date,
+    "solde_de_cagnotte": 20000,
+    "beneficiaires":[
+        [CODE_COMPTE_CLIENT_ORDINAIRE,4000],[CODE_COMPTE_CLIENT_ORDINAIRE,7000],[CODE_COMPTE_CLIENT_ORDINAIRE,9000]
+    ]
+}
