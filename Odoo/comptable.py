@@ -897,7 +897,7 @@ def ecriture_comptable_23_1(reference, date, journal, libelle, montant_de_versem
 
 # Ecriture comptable 24.1     Retrait de montant d'une agence par un agent trésorier
 
-def ecriture_comptable_24_1(reference, date, journal, libelle, montant_de_versement):
+def ecriture_comptable_24_1(reference, date, journal, libelle, montant_de_retrait):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_TRESORIER)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
 
@@ -906,8 +906,8 @@ def ecriture_comptable_24_1(reference, date, journal, libelle, montant_de_versem
         'date': date,
         'journal_id': journal,
         'line_ids': [
-            (0, 0, {'debit': 0, 'credit': montant_de_versement , 'account_id': compte_origine, 'name': libelle}),
-            (0, 0, {'debit': montant_de_versement, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
+            (0, 0, {'debit': 0, 'credit': montant_de_retrait , 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': montant_de_retrait, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
         ]
     }
     return transaction
@@ -919,7 +919,7 @@ def ecriture_comptable_24_1(reference, date, journal, libelle, montant_de_versem
 def ecriture_comptable_25_1(reference, date, journal, libelle, solde_de_cagnotte,beneficiaire=[]):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAGNOTTE)])[0]
     
-    (0, 0, {'debit': beneficiaire[i][1], 'credit': 0,'account_id': beneficiaire[i][0], 'name': libelle})
+    (0, 0, {'debit': beneficiaire[0][1], 'credit': 0,'account_id': beneficiaire[0][0], 'name': libelle})
     transaction = {
         'ref': reference,
         'date': date,
@@ -965,25 +965,130 @@ else:
     journal = journal_t[0]
 
 
-date = '10-01-2022'
+date = '11-01-2022'
 date = transform_date_form(date)
 
-
-input_25_1 = {
-    "libelle": "Transfert: cagnotte vers multiple clients ordinaire",
-    "reference": 'TR 25.1',
+input_1_1 = {
+    "libelle": "Transfert: client ordinaire  vers client PRO ",
+    "reference": 'TR 1.1',
     "journal": journal,
     "date": date,
-    "solde_de_cagnotte": 20000,
-    "beneficiaires":[
-        [CODE_COMPTE_CLIENT_ORDINAIRE,4000],[CODE_COMPTE_CLIENT_ORDINAIRE,7000],[CODE_COMPTE_CLIENT_ORDINAIRE,9000]
-    ]
+    "valeur_nette_du_transfert": 1000,
+    "commission": 50,
+    "taxe": round(50*POURCENTAGE_TAXE, 2)
+}
+
+input_5_1 = {
+    "libelle": "Retrait: client ordinaire  du caisse RimCash",
+    "reference": 'TR 5.1',
+    "journal": journal,
+    "date": date,
+    "valeur_nette_du_retrait": 1000,
+    "commission": 50,
+    "taxe": round((50)*POURCENTAGE_TAXE, 2)
+}
+
+input_7_1 = {
+    "libelle": "Alimentation: client ordinaire , du caisse RimCash",
+    "reference": 'TR 7.1',
+    "journal": journal,
+    "date": date,
+    "montant_alimentation": 500,
+    "commission": 20,
+    "taxe": round((20)*POURCENTAGE_TAXE, 2)
+}
+
+input_9_1 = {
+    "libelle": "Paiement: client ordinaire , client commerçant",
+    "reference": 'TR 9.1',
+    "journal": journal,
+    "date": date,
+    "valeur_du_bien": 400,
+    "commission": 60,
+    "taxe": round((60)*POURCENTAGE_TAXE, 2)
+}
+input_15_1 = {
+    "libelle": "Paiement de carte: par client RimCash",
+    "reference": 'TR 15.1',
+    "journal": journal,
+    "date": date,
+    "montant_de_vente": 50,
+    "cout_achat": 47,
+    "margeRimCash": 3,
+    "taxe": round((3)*POURCENTAGE_TAXE, 2)
+}
+
+input_16_1 = {
+    "libelle": "Paiement Facture: client RimCash, facturiers",
+    "reference": 'TR 16.1',
+    "journal": journal,
+    "date": date,
+    "montant_paye": 3500,
+    "commission": 70,
+    "taxe": round((70)*POURCENTAGE_TAXE, 2)
+}
+
+input_18_1 = {
+    "libelle": "Renboursement de facture: client RimCash, commerçant RimCash",
+    "reference": 'TR 18.1',
+    "journal": journal,
+    "date": date,
+    "valeur_du_bien": 400,
+    "commission": 40,
+    "taxe": round((40)*POURCENTAGE_TAXE, 2)
+}
+
+input_21_1 = {
+    "libelle": "depot cagnotte: clients ordinaire depot dans une cagnotte",
+    "reference": 'TR 21.1',
+    "journal": journal,
+    "date": date,
+    "valeur_de_depot": 1000,
+    "commission": 50,
+    "taxe": round(50*POURCENTAGE_TAXE, 2)
 }
 
 
 
 
-transaction = ecriture_comptable_25_1(**input_25_1)
+
+
+
+
+
+
+value = '03'
+if value == '01':
+    print ("Transfer")
+    transaction = ecriture_comptable_1_1(**input_1_1)
+elif value == '02':
+    transaction = ecriture_comptable_5_1(**input_5_1)
+elif value == '03':
+    transaction = ecriture_comptable_7_1(**input_7_1)
+elif value == '04':
+    transaction = ecriture_comptable_1_1(**input_1_1)
+elif value == '05':
+    transaction = ecriture_comptable_7_1(**input_7_1)
+elif value == '06':
+    transaction = ecriture_comptable_9_1(**input_9_1)
+elif value == '07':
+    transaction = ecriture_comptable_1_1(**input_1_1)
+elif value == '08':
+    transaction = ecriture_comptable_18_1(**input_18_1)
+elif value == '09':
+    transaction = ecriture_comptable_21_1(**input_21_1)
+elif value == '10':
+    transaction = ecriture_comptable_1_1(**input_1_1)
+# elif value == '11':
+#     transaction = ecriture_comptable_20_1(**input_1_1)
+# elif value == '12':
+#     transaction = ecriture_comptable_25_1(**input_1_1)
+elif value == '13':
+    transaction = ecriture_comptable_16_1(**input_16_1)
+elif value == '14':
+    transaction = ecriture_comptable_15_1(**input_15_1)
+
+
 
 
 # Ajout des pièces comptables
