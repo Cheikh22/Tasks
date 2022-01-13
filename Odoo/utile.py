@@ -195,8 +195,8 @@ input_20_1 = {
     "journal": journal,
     "date": date,
     "montant": 20000,
-    "commission_multiple": 150,
-    "taxe_multiple": round(150*POURCENTAGE_TAXE, 2),
+    "commission": 150,
+    "taxe": round(150*POURCENTAGE_TAXE, 2),
     "employes":[
         [CODE_COMPTE_CLIENT_ORDINAIRE,5000,45],[CODE_COMPTE_CLIENT_ORDINAIRE,7000,60],[CODE_COMPTE_CLIENT_ORDINAIRE,9000,75]
     ]

@@ -804,14 +804,15 @@ def ecriture_comptable_19_1(id_transaction, date, journal, libelle, montant, com
 
 # Ecriture comptable 20.1     Paiement de plusieurs clients RimCash par un client RimCash Pro (Entreprise) 
 
-def ecriture_comptable_20_1(id_transaction, date, journal, libelle, montant,commission_multiple=0,taxe_multiple=0,employees=[]):
+def ecriture_comptable_20_1(id_transaction, date, journal, libelle, montant,commission=0,taxe=0,recepteurs=[]):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_PRO)])[0]
     compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION)])[0]
     compte_commision_multiple = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_MULTIPLE)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
-    for i in range(len(employees)):
-        list1=(0, 0, {'debit': employees[i][1], 'credit': employees[i][2]+employees[i][2]*POURCENTAGE_TAXE,'account_id': employees[i][0], 'name': libelle}),(0, 0, {'debit': employees[i][2], 'credit': 0,'account_id': compte_commision, 'name': libelle}),(0, 0, {'debit': employees[i][2]*POURCENTAGE_TAXE, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
-        listAll = list1
+    listAll = []
+    for i in range(len(recepteurs)):
+        list1=(0, 0, {'debit': recepteurs[i][1], 'credit': recepteurs[i][2]+recepteurs[i][2]*POURCENTAGE_TAXE,'account_id': recepteurs[i][0], 'name': libelle}),(0, 0, {'debit': recepteurs[i][2], 'credit': 0,'account_id': compte_commision, 'name': libelle}),(0, 0, {'debit': recepteurs[i][2]*POURCENTAGE_TAXE, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
+        listAll.append(list1)
     print(listAll)
 
     transaction = {
@@ -819,9 +820,9 @@ def ecriture_comptable_20_1(id_transaction, date, journal, libelle, montant,comm
         'date': date,
         'journal_id': journal,
         'line_ids': [
-            (0, 0, {'debit': 0, 'credit': montant +commission_multiple+taxe_multiple, 'account_id': compte_origine, 'name': libelle}),
-            (0, 0, {'debit': commission_multiple, 'credit': 0,'account_id': compte_commision_multiple, 'name': libelle}),
-            (0, 0, {'debit': taxe_multiple, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
+            (0, 0, {'debit': 0, 'credit': montant +commission+taxe, 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': commission, 'credit': 0,'account_id': compte_commision_multiple, 'name': libelle}),
+            (0, 0, {'debit': taxe, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
             listAll
             
         ]
@@ -916,17 +917,21 @@ def ecriture_comptable_24_1(id_transaction, date, journal, libelle, montant):
 
 # Ecriture comptable 25.1     Fermeture de la cagnotte et remboussement des dépôts faits par les clients rimCash
 
-def ecriture_comptable_25_1(id_transaction, date, journal, libelle, montant,beneficiaire=[]):
+def ecriture_comptable_25_1(id_transaction, date, journal, libelle, montant,recepteurs=[]):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAGNOTTE)])[0]
+    listAll = [(0, 0, {'debit': 0, 'credit': montant, 'account_id': compte_origine, 'name': libelle})]
+    for i in range(len(recepteurs)):
+        compte_beneficiaire = account_model.search([('code', '=', recepteurs[i][0])])[0]
+        list1=(0, 0, {'debit': recepteurs[i][1], 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle})
+        listAll.append(list1)
+    print(listAll)
+
     
-    (0, 0, {'debit': beneficiaire[0][1], 'credit': 0,'account_id': beneficiaire[0][0], 'name': libelle})
     transaction = {
         'ref': id_transaction,
         'date': date,
         'journal_id': journal,
-        'line_ids': [
-            (0, 0, {'debit': 0, 'credit': montant, 'account_id': compte_origine, 'name': libelle}) for i in range(len(beneficiaire))
-        ]
+        'line_ids': listAll
     }
     return transaction
 
@@ -1152,9 +1157,9 @@ input_20_1 = {
     "journal": journal,
     "date": date,
     "montant": 20000,
-    "commission_multiple": 150,
-    "taxe_multiple": round(150*POURCENTAGE_TAXE, 2),
-    "employes":[
+    "commission": 150,
+    "taxe": round(150*POURCENTAGE_TAXE, 2),
+    "recepteurs":[
         [CODE_COMPTE_CLIENT_ORDINAIRE,5000,45],[CODE_COMPTE_CLIENT_ORDINAIRE,7000,60],[CODE_COMPTE_CLIENT_ORDINAIRE,9000,75]
     ]
 }
@@ -1206,7 +1211,7 @@ input_25_1 = {
     "journal": journal,
     "date": date,
     "montant": 20000,
-    "beneficiaires":[
+    "recepteurs":[
         [CODE_COMPTE_CLIENT_ORDINAIRE,4000],[CODE_COMPTE_CLIENT_ORDINAIRE,7000],[CODE_COMPTE_CLIENT_ORDINAIRE,9000]
     ]
 }
@@ -1218,7 +1223,7 @@ input_25_1 = {
 
 
 
-def comtabiliser(type_transaction, id_transaction, date, journal, libelle, montant,cout_achat=0,margeRimCash=0, commission=0, taxe=0) :
+def comtabiliser(type_transaction, id_transaction, date, journal, libelle, montant,cout_achat=0,margeRimCash=0, commission=0, taxe=0, recepteurs=[]) :
     value = type_transaction
     if value == '01':
         transaction = ecriture_comptable_1_1(id_transaction, date, journal, libelle, montant, commission, taxe)
@@ -1252,8 +1257,8 @@ def comtabiliser(type_transaction, id_transaction, date, journal, libelle, monta
         transaction = ecriture_comptable_18_1(id_transaction, date, journal, libelle, montant, commission, taxe)
     elif value == '19':
         transaction = ecriture_comptable_19_1(id_transaction, date, journal, libelle, montant, commission, taxe)
-    # elif value == '20':
-    #     transaction = ecriture_comptable_20_1(**input_1_1)
+    elif value == '20':
+        transaction = ecriture_comptable_20_1(id_transaction, date, journal, libelle, montant, commission, taxe, recepteurs)
     elif value == '21':
         transaction = ecriture_comptable_21_1(id_transaction, date, journal, libelle, montant, commission, taxe)
     elif value == '22':
@@ -1262,6 +1267,8 @@ def comtabiliser(type_transaction, id_transaction, date, journal, libelle, monta
         transaction = ecriture_comptable_23_1(id_transaction, date, journal, libelle, montant)
     elif value == '24':
         transaction = ecriture_comptable_24_1(id_transaction, date, journal, libelle, montant)
+    elif value == '25':
+        transaction = ecriture_comptable_25_1(id_transaction, date, journal, libelle, montant, recepteurs)
 
     # Ajout des pièces comptables
     print("Import en cours .......")
@@ -1278,23 +1285,4 @@ def comtabiliser(type_transaction, id_transaction, date, journal, libelle, monta
 
     print("Import terminé!!!")
 
-comtabiliser(**input_1_1)
-comtabiliser(**input_5_1)
-comtabiliser(**input_6_1)
-comtabiliser(**input_7_1)
-comtabiliser(**input_8_1)
-comtabiliser(**input_9_1)
-comtabiliser(**input_10_1)
-comtabiliser(**input_11_1)
-comtabiliser(**input_12_1)
-comtabiliser(**input_13_1)
-comtabiliser(**input_14_1)
-comtabiliser(**input_15_1)
-comtabiliser(**input_16_1)
-comtabiliser(**input_17_1)
-comtabiliser(**input_18_1)
-comtabiliser(**input_19_1)
-comtabiliser(**input_21_1)
-comtabiliser(**input_22_1)
-comtabiliser(**input_23_1)
-comtabiliser(**input_24_1)
+comtabiliser(**input_25_1)
