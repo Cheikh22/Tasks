@@ -924,8 +924,6 @@ def ecriture_comptable_25_1(id_transaction, date, journal, libelle, montant,rece
         compte_beneficiaire = account_model.search([('code', '=', recepteurs[i][0])])[0]
         list1=(0, 0, {'debit': recepteurs[i][1], 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle})
         listAll.append(list1)
-    print(listAll)
-
     
     transaction = {
         'ref': id_transaction,
@@ -970,9 +968,10 @@ else:
     journal = journal_t[0]
 
 
-date = '12-01-2022'
+date = '14-01-2022'
 date = transform_date_form(date)
-
+date =date + ' 16:00:11.25485+00'
+print(date)
 
 input_1_1 = {
     "type_transaction": "01",
