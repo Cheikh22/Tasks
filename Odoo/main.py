@@ -8,7 +8,7 @@ input_1_1 = {
     "id_transaction": 'TR 1.1',
     "date": date,
     "montant": 1000,
-    "frais": 50
+    "frais_de_depart": 50
 }
 
 input_5_1 = {
@@ -17,7 +17,7 @@ input_5_1 = {
     "id_transaction": 'TR 5.1',
     "date": date,
     "montant": 1000,
-    "frais": 50
+    "frais_de_depart": 50
 }
 
 input_6_1 = {
@@ -26,7 +26,7 @@ input_6_1 = {
     "id_transaction": 'TR 6.1',
     "date": date,
     "montant": 1000,
-    "frais": 50
+    "frais_de_depart": 50
 }
 
 input_7_1 = {
@@ -51,7 +51,7 @@ input_9_1 = {
     "id_transaction": 'TR 9.1',
     "date": date,
     "montant": 400,
-    "frais": 60
+    "frais_de_depart": 60
 }
 
 input_10_1 = {
@@ -60,7 +60,7 @@ input_10_1 = {
     "id_transaction": 'TR 10.1',
     "date": date,
     "montant": 400,
-    "frais": 60
+    "frais_de_depart": 60
 }
 
 input_11_1 = {
@@ -69,7 +69,7 @@ input_11_1 = {
     "id_transaction": 'TR 11.1',
     "date": date,
     "montant": 400,
-    "frais": 60
+    "frais_de_depart": 60
 }
 
 input_12_1 = {
@@ -78,7 +78,7 @@ input_12_1 = {
     "id_transaction": 'TR 12.1',
     "date": date,
     "montant": 400,
-    "frais": 60
+    "frais_de_depart": 60
 }
 
 input_13_1 = {
@@ -87,7 +87,7 @@ input_13_1 = {
     "id_transaction": 'TR 13.1',
     "date": date,
     "montant": 400,
-    "frais": 40
+    "frais_de_depart": 40
 }
 
 input_14_1 = {
@@ -96,7 +96,7 @@ input_14_1 = {
     "id_transaction": 'TR 14.1',
     "date": date,
     "montant": 400,
-    "frais": 40
+    "frais_de_depart": 40
 }
 
 input_15_1 = {
@@ -130,7 +130,7 @@ input_16_1 = {
     "id_transaction": 'TR 16.1',
     "date": date,
     "montant": 3500,
-    "frais": 70
+    "frais_de_depart": 70
 }
 
 input_17_1 = {
@@ -139,7 +139,7 @@ input_17_1 = {
     "id_transaction": 'TR 17.1',
     "date": date,
     "montant": 3500,
-    "frais": 70
+    "frais_de_depart": 70
 }
 
 input_18_1 = {
@@ -148,7 +148,7 @@ input_18_1 = {
     "id_transaction": 'TR 18.1',
     "date": date,
     "montant": 400,
-    "frais": 40
+    "frais_de_depart": 40
 }
 
 input_19_1 = {
@@ -157,7 +157,7 @@ input_19_1 = {
     "id_transaction": 'TR 19.1',
     "date": date,
     "montant": 400,
-    "frais": 40
+    "frais_de_depart": 40
 }
 
 input_20_1 = {
@@ -166,7 +166,7 @@ input_20_1 = {
     "id_transaction": 'TR 20.1',
     "date": date,
     "montant": 77000,
-    "frais": 80,
+    "frais_de_depart": 80,
     "recepteurs":[
         [CODE_COMPTE_CLIENT_ORDINAIRE,15000,45],[CODE_COMPTE_CLIENT_ORDINAIRE,24000,60],[CODE_COMPTE_CLIENT_ORDINAIRE,38000,75]
     ]
@@ -178,7 +178,7 @@ input_21_1 = {
     "id_transaction": 'TR 21.1',
     "date": date,
     "montant": 1000,
-    "frais": 50
+    "frais_de_depart": 50
 }
 
 input_22_1 = {
@@ -187,7 +187,7 @@ input_22_1 = {
     "id_transaction": 'TR 22.1',
     "date": date,
     "montant": 4000,
-    "frais": 50
+    "frais_de_depart": 50
 }
 
 input_23_1 = {
@@ -235,7 +235,7 @@ input_25_1 = {
 # comtabiliser(**input_17_1)
 # comtabiliser(**input_18_1)
 # comtabiliser(**input_19_1)
-comtabiliser(**input_20_1)
+# comtabiliser(**input_20_1)
 # comtabiliser(**input_21_1)
 # comtabiliser(**input_22_1)
 # comtabiliser(**input_23_1)

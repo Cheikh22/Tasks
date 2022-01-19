@@ -13,7 +13,7 @@ JOURNAL_TRANSFERT = "TestComptable"
 POURCENTAGE_TAXE = 0.14  # La taxe est fixée à 14% de la commission
 
 
-def comtabiliser(type_transaction, id_transaction, date, libelle, montant,cout_achat=0, frais=0, recepteurs=[]) :
+def comtabiliser(type_transaction, id_transaction, date, libelle, montant,cout_achat=0, frais_de_depart=0, recepteurs=[]) :
 
     connection = odoolib.get_connection(
         hostname=HOSTNAME,
@@ -47,8 +47,8 @@ def comtabiliser(type_transaction, id_transaction, date, libelle, montant,cout_a
         journal = journal_t[0]
 
     value = type_transaction
-    taxe = frais*POURCENTAGE_TAXE
-    commission = frais-taxe
+    taxe = frais_de_depart*POURCENTAGE_TAXE
+    commission = frais_de_depart-taxe
 
     if value == '01':
         transaction = ecriture_comptable_1_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)

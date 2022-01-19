@@ -226,77 +226,6 @@ input_25_1 = {
 
 
 
-
-
-
-# # Ecriture comptable 1.2
-# def ecriture_comptable_1_2(id_transaction, date, journal, libelle, montant, commission=0, commission_partenaire_recepteur=0, taxe=0):
-#     compte_origine = account_model.search(
-#         [('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
-#     compte_beneficiaire = account_model.search(
-#         [('code', '=', CODE_COMPTE_CLIENT_PRO)])[0]
-#     compte_commission = account_model.search(
-#         [('code', '=', CODE_COMPTE_COMMISSION)])[0]
-#     compte_commission_partenaire_recepteur = account_model.search(
-#         [('code', '=', CODE_COMPTE_AGENCE_PARTENAIRE)])[0]
-#     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
-
-#     transaction = {
-#         'ref': id_transaction,
-#         'date': date,
-#         'journal_id': journal,
-#         'line_ids': [
-#             (0, 0, {'debit': 0, 'credit': montant+commission +
-#              commission_partenaire_recepteur+taxe, 'account_id': compte_origine, 'name': libelle}),
-#             (0, 0, {'debit': montant, 'credit': 0,
-#              'account_id': compte_beneficiaire, 'name': libelle}),
-#             (0, 0, {'debit': commission, 'credit': 0,
-#              'account_id': compte_commission, 'name': libelle}),
-#             (0, 0, {'debit': commission_partenaire_recepteur, 'credit': 0,
-#              'account_id': compte_commission_partenaire_recepteur, 'name': libelle}),
-#             (0, 0, {'debit': taxe, 'credit': 0,
-#              'account_id': compte_taxe, 'name': libelle}),
-#         ]
-#     }
-#     return transaction
-
-
-# # Ecriture comptable 1.3
-# def ecriture_comptable_1_3(id_transaction, date, journal, libelle, montant, commission=0, commission_partenaire_recepteur=0, commission_partenaire_emetteur=0, taxe=0):
-#     compte_origine = account_model.search(
-#         [('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
-#     compte_beneficiaire = account_model.search(
-#         [('code', '=', CODE_COMPTE_CLIENT_PRO)])[0]
-#     compte_commission = account_model.search(
-#         [('code', '=', CODE_COMPTE_COMMISSION)])[0]
-#     compte_commission_partenaire_recepteur = account_model.search(
-#         [('code', '=', CODE_COMPTE_AGENCE_PARTENAIRE)])[0]
-#     compte_commission_partenaire_emetteur = account_model.search(
-#         [('code', '=', CODE_COMPTE_AGENCE_PARTENAIRE)])[0]
-#     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
-
-#     transaction = {
-#         'ref': id_transaction,
-#         'date': date,
-#         'journal_id': journal,
-#         'line_ids': [
-#             (0, 0, {'debit': 0, 'credit': montant+commission+commission_partenaire_recepteur +
-#              commission_partenaire_emetteur+taxe, 'account_id': compte_origine, 'name': libelle}),
-#             (0, 0, {'debit': montant, 'credit': 0,
-#              'account_id': compte_beneficiaire, 'name': libelle}),
-#             (0, 0, {'debit': commission, 'credit': 0,
-#              'account_id': compte_commission, 'name': libelle}),
-#             (0, 0, {'debit': commission_partenaire_recepteur, 'credit': 0,
-#              'account_id': compte_commission_partenaire_recepteur, 'name': libelle}),
-#             (0, 0, {'debit': commission_partenaire_emetteur, 'credit': 0,
-#              'account_id': compte_commission_partenaire_emetteur, 'name': libelle}),
-#             (0, 0, {'debit': taxe, 'credit': 0,
-#              'account_id': compte_taxe, 'name': libelle}),
-#         ]
-#     }
-#     return transaction
-
-
 # # Ecriture comptable 2.1
 
 # def ecriture_comptable_2_1(id_transaction, date, journal, libelle, montant, commission=0, taxe=0):
@@ -357,41 +286,6 @@ input_25_1 = {
 #     }
 #     return transaction
 
-
-# # Ecriture comptable 2.3
-# def ecriture_comptable_2_3(id_transaction, date, journal, libelle, montant, commission=0, commission_partenaire_recepteur=0, commission_partenaire_emetteur=0, taxe=0):
-#     compte_origine = account_model.search(
-#         [('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
-#     compte_beneficiaire = account_model.search(
-#         [('code', '=', CODE_COMPTE_CLIENT_OCCASIONNELS)])[0]
-#     compte_commission = account_model.search(
-#         [('code', '=', CODE_COMPTE_COMMISSION)])[0]
-#     compte_commission_partenaire_recepteur = account_model.search(
-#         [('code', '=', CODE_COMPTE_AGENCE_PARTENAIRE)])[0]
-#     compte_commission_partenaire_emetteur = account_model.search(
-#         [('code', '=', CODE_COMPTE_AGENCE_PARTENAIRE)])[0]
-#     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
-
-#     transaction = {
-#         'ref': id_transaction,
-#         'date': date,
-#         'journal_id': journal,
-#         'line_ids': [
-#             (0, 0, {'debit': 0, 'credit': montant+commission+commission_partenaire_recepteur +
-#              commission_partenaire_emetteur+taxe, 'account_id': compte_origine, 'name': libelle}),
-#             (0, 0, {'debit': montant, 'credit': 0,
-#              'account_id': compte_beneficiaire, 'name': libelle}),
-#             (0, 0, {'debit': commission, 'credit': 0,
-#              'account_id': compte_commission, 'name': libelle}),
-#             (0, 0, {'debit': commission_partenaire_recepteur, 'credit': 0,
-#              'account_id': compte_commission_partenaire_recepteur, 'name': libelle}),
-#             (0, 0, {'debit': commission_partenaire_emetteur, 'credit': 0,
-#              'account_id': compte_commission_partenaire_emetteur, 'name': libelle}),
-#             (0, 0, {'debit': taxe, 'credit': 0,
-#              'account_id': compte_taxe, 'name': libelle}),
-#         ]
-#     }
-#     return transaction
 
 
 # # Ecriture comptable 3.1
