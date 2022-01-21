@@ -5,18 +5,19 @@ CODE_COMPTE_CLIENT_OCCASIONNELS = 2100000004   # Clients occansionnels
 CODE_COMPTE_CLIENT_COMMERCANTS = 2100000005   # Clients commerçant
 CODE_COMPTE_AGENCE_PARTENAIRE = 2100000006  # Agence partenaire
 CODE_COMPTE_FACTURIERS = 2100000008   #  Facturiers
+CODE_COMPTE_CAGNOTTE = 2160000001   # Cagnotte
 
 CODE_COMPTE_CAISSE_AGENCES_RIMASH = 1000001001 #Caisses Agences RimCash
 CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE = 1000002001 #Caisses Agences Partenaires
 CODE_COMPTE_ESPERCES = 101501   # Espèces
-CODE_COMPTE_CAGNOTTE = 2160000001   # Cagnotte
 CODE_COMPTE_TRESORIER = 1000000001   # Tresorier
 
 CODE_COMPTE_TAXE = 3230000001  # Taxes sur les opérations financieres
 CODE_COMPTE_COMMISSION_PARTENAIRE_TRANSFERT = 3260000001  # Commissions Agences partenaires / transfert d'argents
-CODE_COMPTE_COMMISSION_PARTENAIRE_RETRAIT = 3260001001  # Commissions RimCash / Retrait d'argents
-CODE_COMPTE_COMMISSION_PARTENAIRE_VERSEMENT = 3260002001  # Commissions RimCash / Versement d'argents
+CODE_COMPTE_COMMISSION_PARTENAIRE_RETRAIT = 3260001001  # Commissions Agences partenaires / Retrait d'argents
+CODE_COMPTE_COMMISSION_PARTENAIRE_VERSEMENT = 3260002001  # Commissions Agences partenaires / Versement d'argents
 CODE_COMPTE_COMMISSION_PARTENAIRE_FACTURIER = 3260003001  # Commissions RimCash /  paiement facturier
+CODE_COMPTE_VIREMENT_BANQUAIRE = 3200001001   #  Virement banquaire 
 
 CODE_COMPTE_COMMISSION_TRANSFERT = 7029000001  # Commissions RimCash / transfert d'argents
 CODE_COMPTE_COMMISSION_MULTIPLE = 7029000002  # Commissions RimCash / transfert multiple
@@ -27,6 +28,7 @@ CODE_COMPTE_COMMISSION_FACTURIER = 7029005001   #  Commissions  RimCash / paieme
 CODE_COMPTE_COMMISSION_VERSEMENT = 7029002001   #  Commissions  RimCash / versement d'argents
 CODE_COMPTE_COMMISSION_DEPOT_CAGNOTTE = 7029004001   #  Commissions RimCash / Depot dans une cagnotte
 CODE_COMPTE_FRAIS_VERSEMENT = 6021000001   #  Frais payé par RimCash / versement d'argents
+CODE_COMPTE_COMMISSION_VIREMENT_BANQUAIRE = 7029002002  # Commissions RimCash /  Virement banquaire
 
 CODE_COMPTE_MARGE_MAURITEL = 7029006001   #  Marge / vente carte de recharge Mauritel
 CODE_COMPTE_MARGE_MATTEL = 7029006002   #  Marge / vente carte de recharge Mattel
@@ -89,9 +91,9 @@ def ecriture_comptable_2_1(account_model, id_transaction, date, journal, libelle
 # Ecriture comptable 2.2
 def ecriture_comptable_2_2(account_model, id_transaction, date, journal, libelle, montant, commission=0, commission_partenaire=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
-    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_OCCASIONNELS)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
     compte_commission = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_TRANSFERT)])[0]
-    compte_commission_partenaire = account_model.search([('code', '=', CODE_COMPTE_AGENCE_PARTENAIRE)])[0]
+    compte_commission_partenaire = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_PARTENAIRE_TRANSFERT)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
 
     transaction = {
@@ -694,6 +696,32 @@ def ecriture_comptable_17_1(account_model, id_transaction, date, journal, libell
 
 
 
+
+# Ecriture comptable 17.2    Paiement de facture par un client RimCash à un facturier via une agence
+
+def ecriture_comptable_17_2(account_model, id_transaction, date, journal, libelle, montant, commission=0,commission_partenaire=0, taxe=0):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_FACTURIERS)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_FACTURIER)])[0]
+    compte_commision_partenaire = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_PARTENAIRE_FACTURIER)])[0]
+    compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
+
+    transaction = {
+        'ref': id_transaction,
+        'date': date,
+        'journal_id': journal,
+        'line_ids': [
+            (0, 0, {'debit': 0, 'credit': montant +commission+commission_partenaire+taxe, 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': montant, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
+            (0, 0, {'debit': commission, 'credit': 0,'account_id': compte_commision, 'name': libelle}),
+            (0, 0, {'debit': commission_partenaire, 'credit': 0,'account_id': compte_commision_partenaire, 'name': libelle}),
+            (0, 0, {'debit': taxe, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
+        ]
+    }
+    return transaction
+
+
+
 # Ecriture comptable 18.1     Rembourssement de facture à un client RimCash par un commerçant RimCash
 
 def ecriture_comptable_18_1(account_model, id_transaction, date, journal, libelle, montant, commission=0, taxe=0):
@@ -861,6 +889,30 @@ def ecriture_comptable_25_1(account_model, id_transaction, date, journal, libell
         'date': date,
         'journal_id': journal,
         'line_ids': listAll
+    }
+    return transaction
+
+
+
+
+# Ecriture comptable 26.1     Transfert d'un client RimCash a autre Banque
+
+def ecriture_comptable_26_1(account_model, id_transaction, date, journal, libelle, montant, commission=0, taxe=0):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_VIREMENT_BANQUAIRE)])[0]
+    compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_VIREMENT_BANQUAIRE)])[0]
+    compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
+
+    transaction = {
+        'ref': id_transaction,
+        'date': date,
+        'journal_id': journal,
+        'line_ids': [
+            (0, 0, {'debit': 0, 'credit': montant +commission+taxe, 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': montant, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
+            (0, 0, {'debit': commission, 'credit': 0,'account_id': compte_commision, 'name': libelle}),
+            (0, 0, {'debit': taxe, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
+        ]
     }
     return transaction
 

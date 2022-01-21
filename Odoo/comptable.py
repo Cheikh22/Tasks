@@ -52,14 +52,34 @@ def comtabiliser(type_transaction, id_transaction, date, libelle, montant,cout_a
 
     if value == '01':
         transaction = ecriture_comptable_1_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
-    elif value == '05':
+    elif value == '02.1':
+        transaction = ecriture_comptable_2_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
+    elif value == '02.2':
+        transaction = ecriture_comptable_2_2(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
+    elif value == '03.2':
+        transaction = ecriture_comptable_3_2(account_model, id_transaction, date, journal, libelle, montant)
+    elif value == '04.1':
+        transaction = ecriture_comptable_4_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
+    elif value == '04.2':
+        transaction = ecriture_comptable_4_2(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
+    elif value == '04.3':
+        transaction = ecriture_comptable_4_3(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
+    elif value == '05.1':
         transaction = ecriture_comptable_5_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
-    elif value == '06':
+    elif value == '05.2':
+        transaction = ecriture_comptable_5_2(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
+    elif value == '06.1':
         transaction = ecriture_comptable_6_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
-    elif value == '07':
+    elif value == '06.2':
+        transaction = ecriture_comptable_6_2(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
+    elif value == '07.1':
         transaction = ecriture_comptable_7_1(account_model, id_transaction, date, journal, libelle, montant)
-    elif value == '08':
+    elif value == '07.2':
+        transaction = ecriture_comptable_7_2(account_model, id_transaction, date, journal, libelle, montant)
+    elif value == '08.1':
         transaction = ecriture_comptable_8_1(account_model, id_transaction, date, journal, libelle, montant)
+    elif value == '08.2':
+        transaction = ecriture_comptable_8_2(account_model, id_transaction, date, journal, libelle, montant)
     elif value == '09':
         transaction = ecriture_comptable_9_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
     elif value == '10':
@@ -72,22 +92,24 @@ def comtabiliser(type_transaction, id_transaction, date, libelle, montant,cout_a
         transaction = ecriture_comptable_13_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
     elif value == '14':
         transaction = ecriture_comptable_14_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
-    elif value == '151':
+    elif value == '15.1':
         taxe_marge=(montant-cout_achat)*POURCENTAGE_TAXE
         margeRimCash=montant-cout_achat-taxe_marge
         transaction = ecriture_comptable_15_1(account_model, id_transaction, date, journal, libelle, montant,cout_achat,margeRimCash,taxe_marge)
-    elif value == '152':
+    elif value == '15.2':
         taxe_marge=(montant-cout_achat)*POURCENTAGE_TAXE
         margeRimCash=montant-cout_achat-taxe_marge
         transaction = ecriture_comptable_15_2(account_model, id_transaction, date, journal, libelle, montant,cout_achat,margeRimCash,taxe_marge)
-    elif value == '153':
+    elif value == '15.3':
         taxe_marge=(montant-cout_achat)*POURCENTAGE_TAXE
         margeRimCash=montant-cout_achat-taxe_marge
         transaction = ecriture_comptable_15_3(account_model, id_transaction, date, journal, libelle, montant,cout_achat,margeRimCash,taxe_marge)
     elif value == '16':
         transaction = ecriture_comptable_16_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
-    elif value == '17':
+    elif value == '17.1':
         transaction = ecriture_comptable_17_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
+    elif value == '17.2':
+        transaction = ecriture_comptable_17_2(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
     elif value == '18':
         transaction = ecriture_comptable_18_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
     elif value == '19':
@@ -104,6 +126,8 @@ def comtabiliser(type_transaction, id_transaction, date, libelle, montant,cout_a
         transaction = ecriture_comptable_24_1(account_model, id_transaction, date, journal, libelle, montant)
     elif value == '25':
         transaction = ecriture_comptable_25_1(account_model, id_transaction, date, journal, libelle, montant, recepteurs)
+    elif value == '26':
+        transaction = ecriture_comptable_26_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
 
     # Ajout des pièces comptables
     print("Import en cours .......")
