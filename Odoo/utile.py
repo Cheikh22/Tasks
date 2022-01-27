@@ -17,7 +17,7 @@ CODE_COMPTE_COMMISSION_PARTENAIRE_TRANSFERT = 3260000001  # Commissions Agences 
 CODE_COMPTE_COMMISSION_PARTENAIRE_RETRAIT = 3260001001  # Commissions Agences partenaires / Retrait d'argents
 CODE_COMPTE_COMMISSION_PARTENAIRE_VERSEMENT = 3260002001  # Commissions Agences partenaires / Versement d'argents
 CODE_COMPTE_COMMISSION_PARTENAIRE_FACTURIER = 3260003001  # Commissions RimCash /  paiement facturier
-CODE_COMPTE_VIREMENT_BANQUAIRE = 3200001001   #  Virement banquaire 
+CODE_COMPTE_VIREMENT_BANQUAIRE = 3590001001   #  Virement banquaire 
 
 CODE_COMPTE_COMMISSION_TRANSFERT = 7029000001  # Commissions RimCash / transfert d'argents
 CODE_COMPTE_COMMISSION_MULTIPLE = 7029000002  # Commissions RimCash / transfert multiple
