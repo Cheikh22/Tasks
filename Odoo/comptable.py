@@ -13,7 +13,7 @@ JOURNAL_TRANSFERT = "TestComptable"
 POURCENTAGE_TAXE = 0.14  # La taxe est fixée à 14% de la commission
 
 
-def comtabiliser(type_transaction, id_transaction, date, libelle, montant,cout_achat=0, frais_de_depart=0, recepteurs=[]) :
+def comtabiliser(type_transaction, id_transaction, date, libelle, montant,cout_achat=0, frais_de_depart=0,frais_versement=0, recepteurs=[]) :
 
     connection = odoolib.get_connection(
         hostname=HOSTNAME,
@@ -49,21 +49,26 @@ def comtabiliser(type_transaction, id_transaction, date, libelle, montant,cout_a
     value = type_transaction
     taxe = frais_de_depart*POURCENTAGE_TAXE
     commission = frais_de_depart-taxe
+    commission_partenaire=0
 
     if value == '01':
         transaction = ecriture_comptable_1_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
     elif value == '02.1':
         transaction = ecriture_comptable_2_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
     elif value == '02.2':
-        transaction = ecriture_comptable_2_2(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
+        transaction = ecriture_comptable_2_2(account_model, id_transaction, date, journal, libelle, montant, commission, taxe, commission_partenaire)
+    elif value == '03.1':
+        transaction = ecriture_comptable_3_1(account_model, id_transaction, date, journal, libelle, montant,frais_versement)
     elif value == '03.2':
         transaction = ecriture_comptable_3_2(account_model, id_transaction, date, journal, libelle, montant)
     elif value == '04.1':
         transaction = ecriture_comptable_4_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
     elif value == '04.2':
-        transaction = ecriture_comptable_4_2(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
+        transaction = ecriture_comptable_4_2(account_model, id_transaction, date, journal, libelle, montant, commission, taxe,commission_partenaire)
     elif value == '04.3':
         transaction = ecriture_comptable_4_3(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
+    elif value == '04.4':
+        transaction = ecriture_comptable_4_4(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
     elif value == '05.1':
         transaction = ecriture_comptable_5_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
     elif value == '05.2':
@@ -75,11 +80,11 @@ def comtabiliser(type_transaction, id_transaction, date, libelle, montant,cout_a
     elif value == '07.1':
         transaction = ecriture_comptable_7_1(account_model, id_transaction, date, journal, libelle, montant)
     elif value == '07.2':
-        transaction = ecriture_comptable_7_2(account_model, id_transaction, date, journal, libelle, montant)
+        transaction = ecriture_comptable_7_2(account_model, id_transaction, date, journal, libelle, montant, frais_versement)
     elif value == '08.1':
         transaction = ecriture_comptable_8_1(account_model, id_transaction, date, journal, libelle, montant)
     elif value == '08.2':
-        transaction = ecriture_comptable_8_2(account_model, id_transaction, date, journal, libelle, montant)
+        transaction = ecriture_comptable_8_2(account_model, id_transaction, date, journal, libelle, montant, frais_versement)
     elif value == '09':
         transaction = ecriture_comptable_9_1(account_model, id_transaction, date, journal, libelle, montant, commission, taxe)
     elif value == '10':

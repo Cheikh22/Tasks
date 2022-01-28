@@ -1,6 +1,6 @@
 from comptable import comtabiliser,CODE_COMPTE_CLIENT_ORDINAIRE
 
-date = '2022-01-21 16:00:11'
+date = '2022-01-28 09:00:11'
 
 input_1_1 = {
     "type_transaction": "01",
@@ -26,6 +26,15 @@ input_2_2 = {
     "date": date,
     "montant": 7000,
     "frais_de_depart": 150
+}
+
+input_3_1 = {
+    "type_transaction": "03.1",
+    "libelle": "Transfert de montant d'un client RimCash à un client occasionnel",
+    "id_transaction": 'TR 3.1',
+    "date": date,
+    "montant": 2000,
+    "frais_versement": 100
 }
 
 input_3_2 = {
@@ -58,6 +67,14 @@ input_4_3 = {
     "type_transaction": "04.3",
     "libelle": "Transfert de montant entre deux clients occasionnels",
     "id_transaction": 'TR 4.3',
+    "date": date,
+    "montant": 3000,
+    "frais_de_depart": 80
+}
+input_4_4 = {
+    "type_transaction": "04.4",
+    "libelle": "Transfert de montant entre deux clients occasionnels",
+    "id_transaction": 'TR 4.4',
     "date": date,
     "montant": 3000,
     "frais_de_depart": 80
@@ -107,6 +124,14 @@ input_7_1 = {
     "date": date,
     "montant": 500,
 }
+input_7_2 = {
+    "type_transaction": "07.2",
+    "libelle": "Alimentation du solde client Rimcash via une agence (recharge)",
+    "id_transaction": 'TR 7.2',
+    "date": date,
+    "montant": 2000,
+    "frais_versement": 200
+}
 
 input_8_1 = {
     "type_transaction": "08.1",
@@ -116,6 +141,14 @@ input_8_1 = {
     "montant": 500,
 }
 
+input_8_2 = {
+    "type_transaction": "08.2",
+    "libelle": "Alimentation du solde commerçant Rimcash via une agence (recharge)",
+    "id_transaction": 'TR 8.2',
+    "date": date,
+    "montant": 50000,
+    "frais_versement": 150
+}
 input_9_1 = {
     "type_transaction": "09",
     "libelle": "Paiement: client ordinaire , client commerçant",
@@ -309,38 +342,40 @@ input_26_1 = {
     "frais_de_depart": 50
 }
 
-# comtabiliser(**input_2_1)
-# comtabiliser(**input_2_2)
-# comtabiliser(**input_3_2)
-# comtabiliser(**input_4_1)
-# comtabiliser(**input_4_2)
-# comtabiliser(**input_4_3)
-# comtabiliser(**input_5_1)
-# comtabiliser(**input_5_2)
-# comtabiliser(**input_6_1)
-# comtabiliser(**input_6_2)
-# comtabiliser(**input_7_1)
-# comtabiliser(**input_7_2)
-# comtabiliser(**input_8_1)
-# comtabiliser(**input_8_2)
-# comtabiliser(**input_9_1)
-# comtabiliser(**input_10_1)
-# comtabiliser(**input_11_1)
-# comtabiliser(**input_12_1)
-# comtabiliser(**input_13_1)
-# comtabiliser(**input_14_1)
-# comtabiliser(**input_15_1)
-# comtabiliser(**input_15_2)
-# comtabiliser(**input_15_3)
-# comtabiliser(**input_16_1)
-# comtabiliser(**input_17_1)
-# comtabiliser(**input_17_2)
-# comtabiliser(**input_18_1)
-# comtabiliser(**input_19_1)
-# comtabiliser(**input_20_1)
-# comtabiliser(**input_21_1)
-# comtabiliser(**input_22_1)
-# comtabiliser(**input_23_1)
-# comtabiliser(**input_24_1)
-# comtabiliser(**input_25_1)
+comtabiliser(**input_1_1)
+comtabiliser(**input_2_1)
+comtabiliser(**input_2_2)
+comtabiliser(**input_3_1)
+comtabiliser(**input_3_2)
+comtabiliser(**input_4_1)
+comtabiliser(**input_4_2)
+comtabiliser(**input_4_3)
+comtabiliser(**input_4_4)
+comtabiliser(**input_5_1)
+comtabiliser(**input_6_1)
+comtabiliser(**input_6_2)
+comtabiliser(**input_7_1)
+comtabiliser(**input_7_2)
+comtabiliser(**input_8_1)
+comtabiliser(**input_8_2)
+comtabiliser(**input_9_1)
+comtabiliser(**input_10_1)
+comtabiliser(**input_11_1)
+comtabiliser(**input_12_1)
+comtabiliser(**input_13_1)
+comtabiliser(**input_14_1)
+comtabiliser(**input_15_1)
+comtabiliser(**input_15_2)
+comtabiliser(**input_15_3)
+comtabiliser(**input_16_1)
+comtabiliser(**input_17_1)
+comtabiliser(**input_17_2)
+comtabiliser(**input_18_1)
+comtabiliser(**input_19_1)
+comtabiliser(**input_20_1)
+comtabiliser(**input_21_1)
+comtabiliser(**input_22_1)
+comtabiliser(**input_23_1)
+comtabiliser(**input_24_1)
+comtabiliser(**input_25_1)
 comtabiliser(**input_26_1)

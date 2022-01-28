@@ -6,6 +6,7 @@ CODE_COMPTE_CLIENT_COMMERCANTS = 2100000005   # Clients commerçant
 CODE_COMPTE_AGENCE_PARTENAIRE = 2100000006  # Agence partenaire
 CODE_COMPTE_FACTURIERS = 2100000008   #  Facturiers
 CODE_COMPTE_CAGNOTTE = 2160000001   # Cagnotte
+CODE_COMPTE_MISE_DISPOSITION_ENCOURS = 2180000001   # Mise disposition en cours
 
 CODE_COMPTE_CAISSE_AGENCES_RIMASH = 1000001001 #Caisses Agences RimCash
 CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE = 1000002001 #Caisses Agences Partenaires
@@ -66,11 +67,11 @@ def ecriture_comptable_1_1(account_model, id_transaction, date, journal, libelle
 
 
 
-# Ecriture comptable 2.1
+# Ecriture comptable 2.1     Transfert de montant d'un client RimCash à un client occasionnel (mise à disposition par compte)
 
 def ecriture_comptable_2_1(account_model, id_transaction, date, journal, libelle, montant, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
-    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_MISE_DISPOSITION_ENCOURS)])[0]
     compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_TRANSFERT)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
 
@@ -88,10 +89,32 @@ def ecriture_comptable_2_1(account_model, id_transaction, date, journal, libelle
     return transaction
 
 
-# Ecriture comptable 2.2
-def ecriture_comptable_2_2(account_model, id_transaction, date, journal, libelle, montant, commission=0, commission_partenaire=0, taxe=0):
+
+# Ecriture comptable 2.1.1      Paiement béneficiaire
+
+def ecriture_comptable_2_1_1(account_model, id_transaction, date, journal, libelle, montant):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_MISE_DISPOSITION_ENCOURS)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
+
+    transaction = {
+        'ref': id_transaction,
+        'date': date,
+        'journal_id': journal,
+        'line_ids': [
+            (0, 0, {'debit': 0, 'credit': montant, 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': montant, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle})
+        ]
+    }
+    return transaction
+
+
+
+
+# Ecriture comptable 2.2     Transfert de montant d'un client RimCash à un client occasionnel (mise à disposition par compte)
+
+def ecriture_comptable_2_2(account_model, id_transaction, date, journal, libelle, montant, commission=0, taxe=0, commission_partenaire=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
-    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_MISE_DISPOSITION_ENCOURS)])[0]
     compte_commission = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_TRANSFERT)])[0]
     compte_commission_partenaire = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_PARTENAIRE_TRANSFERT)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
@@ -112,13 +135,32 @@ def ecriture_comptable_2_2(account_model, id_transaction, date, journal, libelle
 
 
 
+# Ecriture comptable 2.2.1      Paiement béneficiaire
+
+def ecriture_comptable_2_2_1(account_model, id_transaction, date, journal, libelle, montant):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_MISE_DISPOSITION_ENCOURS)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
+
+    transaction = {
+        'ref': id_transaction,
+        'date': date,
+        'journal_id': journal,
+        'line_ids': [
+            (0, 0, {'debit': 0, 'credit': montant, 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': montant, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle})
+        ]
+    }
+    return transaction
+
+
+
 # Ecriture comptable 3.1    Transfert de montant d'un client occasionnel à un client Rimcash via une agence (recharge)
 
-def ecriture_comptable_3_1(account_model, id_transaction, date, journal, libelle, montant):
-    compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
+def ecriture_comptable_3_1(account_model, id_transaction, date, journal, libelle, montant, frais_versement=0):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
     compte_frais_versement = account_model.search([('code', '=', CODE_COMPTE_FRAIS_VERSEMENT)])[0]
-    compte_commission_partenaire_versment = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_PARTENAIRE_VERSEMENT)])[0]
+    compte_commission_partenaire_versement = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_PARTENAIRE_VERSEMENT)])[0]
 
     transaction = {
         'ref': id_transaction,
@@ -127,8 +169,8 @@ def ecriture_comptable_3_1(account_model, id_transaction, date, journal, libelle
         'line_ids': [
             (0, 0, {'debit': 0, 'credit': montant , 'account_id': compte_origine, 'name': libelle}),
             (0, 0, {'debit': montant, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
-            (0, 0, {'debit': 0, 'credit': 0,'account_id': compte_frais_versement, 'name': libelle}),
-            (0, 0, {'debit': 0, 'credit': 0,'account_id': compte_commission_partenaire_versment, 'name': libelle}),
+            (0, 0, {'debit': 0, 'credit': frais_versement,'account_id': compte_frais_versement, 'name': libelle}),
+            (0, 0, {'debit': frais_versement, 'credit': 0,'account_id': compte_commission_partenaire_versement, 'name': libelle}),
         ]
     }
     return transaction
@@ -160,7 +202,7 @@ def ecriture_comptable_3_2(account_model, id_transaction, date, journal, libelle
 
 def ecriture_comptable_4_1(account_model, id_transaction, date, journal, libelle, montant, commission=0, taxe=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
-    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_MISE_DISPOSITION_ENCOURS)])[0]
     compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_TRANSFERT)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
 
@@ -178,10 +220,30 @@ def ecriture_comptable_4_1(account_model, id_transaction, date, journal, libelle
     return transaction
 
 
+
+# Ecriture comptable 4.1.1      Paiement béneficiaire
+
+def ecriture_comptable_4_1_1(account_model, id_transaction, date, journal, libelle, montant):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_MISE_DISPOSITION_ENCOURS)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
+
+    transaction = {
+        'ref': id_transaction,
+        'date': date,
+        'journal_id': journal,
+        'line_ids': [
+            (0, 0, {'debit': 0, 'credit': montant, 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': montant, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle})
+        ]
+    }
+    return transaction
+
+
+
 # Ecriture comptable 4.2
-def ecriture_comptable_4_2(account_model, id_transaction, date, journal, libelle, montant, commission=0, commission_partenaire=0, taxe=0):
+def ecriture_comptable_4_2(account_model, id_transaction, date, journal, libelle, montant, commission=0, taxe=0, commission_partenaire=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
-    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_MISE_DISPOSITION_ENCOURS)])[0]
     compte_commission = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_TRANSFERT)])[0]
     compte_commission_partenaire = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_PARTENAIRE_TRANSFERT)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
@@ -199,13 +261,33 @@ def ecriture_comptable_4_2(account_model, id_transaction, date, journal, libelle
         ]
     }
     return transaction
+
+
+
+# Ecriture comptable 4.2.1      Paiement béneficiaire
+
+def ecriture_comptable_4_2_1(account_model, id_transaction, date, journal, libelle, montant):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_MISE_DISPOSITION_ENCOURS)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
+
+    transaction = {
+        'ref': id_transaction,
+        'date': date,
+        'journal_id': journal,
+        'line_ids': [
+            (0, 0, {'debit': 0, 'credit': montant, 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': montant, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle})
+        ]
+    }
+    return transaction
+
 
 
 
 # Ecriture comptable 4.3
-def ecriture_comptable_4_3(account_model, id_transaction, date, journal, libelle, montant, commission=0, commission_partenaire=0, taxe=0):
+def ecriture_comptable_4_3(account_model, id_transaction, date, journal, libelle, montant, commission=0, taxe=0, commission_partenaire=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
-    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_MISE_DISPOSITION_ENCOURS)])[0]
     compte_commission = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_TRANSFERT)])[0]
     compte_commission_partenaire = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_PARTENAIRE_TRANSFERT)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
@@ -223,14 +305,34 @@ def ecriture_comptable_4_3(account_model, id_transaction, date, journal, libelle
         ]
     }
     return transaction
+
+
+
+# Ecriture comptable 4.3.1      Paiement béneficiaire
+
+def ecriture_comptable_4_3_1(account_model, id_transaction, date, journal, libelle, montant):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_MISE_DISPOSITION_ENCOURS)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_RIMASH)])[0]
+
+    transaction = {
+        'ref': id_transaction,
+        'date': date,
+        'journal_id': journal,
+        'line_ids': [
+            (0, 0, {'debit': 0, 'credit': montant, 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': montant, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle})
+        ]
+    }
+    return transaction
+
 
 
 
 
 # Ecriture comptable 4.4
-def ecriture_comptable_4_4(account_model, id_transaction, date, journal, libelle, montant, commission=0, commission_partenaire_recepteur=0, commission_partenaire_emetteur=0, taxe=0):
+def ecriture_comptable_4_4(account_model, id_transaction, date, journal, libelle, montant, commission=0, taxe=0, commission_partenaire_recepteur=0, commission_partenaire_emetteur=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
-    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_MISE_DISPOSITION_ENCOURS)])[0]
     compte_commission = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_TRANSFERT)])[0]
     compte_commission_partenaire_recepteur = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_PARTENAIRE_TRANSFERT)])[0]
     compte_commission_partenaire_emetteur = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_PARTENAIRE_TRANSFERT)])[0]
@@ -247,6 +349,26 @@ def ecriture_comptable_4_4(account_model, id_transaction, date, journal, libelle
             (0, 0, {'debit': commission_partenaire_recepteur, 'credit': 0,'account_id': compte_commission_partenaire_recepteur, 'name': libelle}),
             (0, 0, {'debit': commission_partenaire_emetteur, 'credit': 0,'account_id': compte_commission_partenaire_emetteur, 'name': libelle}),
             (0, 0, {'debit': taxe, 'credit': 0,'account_id': compte_taxe, 'name': libelle}),
+        ]
+    }
+    return transaction
+
+
+
+
+# Ecriture comptable 4.4.1      Paiement béneficiaire
+
+def ecriture_comptable_4_4_1(account_model, id_transaction, date, journal, libelle, montant):
+    compte_origine = account_model.search([('code', '=', CODE_COMPTE_MISE_DISPOSITION_ENCOURS)])[0]
+    compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
+
+    transaction = {
+        'ref': id_transaction,
+        'date': date,
+        'journal_id': journal,
+        'line_ids': [
+            (0, 0, {'debit': 0, 'credit': montant, 'account_id': compte_origine, 'name': libelle}),
+            (0, 0, {'debit': montant, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle})
         ]
     }
     return transaction
@@ -280,7 +402,7 @@ def ecriture_comptable_5_1(account_model, id_transaction, date, journal, libelle
 
 # Ecriture comptable 5.2      Retrait d'espèces via une agence par un client Rimcash
 
-def ecriture_comptable_5_2(account_model, id_transaction, date, journal, libelle, montant, commission=0, commission_partenaire=0, taxe=0):
+def ecriture_comptable_5_2(account_model, id_transaction, date, journal, libelle, montant, commission=0, taxe=0, commission_partenaire=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
     compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_RETRAIT)])[0]
@@ -330,7 +452,7 @@ def ecriture_comptable_6_1(account_model, id_transaction, date, journal, libelle
 
 # Ecriture comptable 6.2      Retrait d'espèces via une agence par un commerçant Rimcash
 
-def ecriture_comptable_6_2(account_model, id_transaction, date, journal, libelle, montant, commission=0, commission_partenaire=0, taxe=0):
+def ecriture_comptable_6_2(account_model, id_transaction, date, journal, libelle, montant, commission=0, taxe=0, commission_partenaire=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_COMMERCANTS)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
     compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_RETRAIT)])[0]
@@ -375,7 +497,7 @@ def ecriture_comptable_7_1(account_model, id_transaction, date, journal, libelle
 
 # Ecriture comptable 7.2    Alimentation du solde client Rimcash via une agence (recharge)
 
-def ecriture_comptable_7_2(account_model, id_transaction, date, journal, libelle, montant):
+def ecriture_comptable_7_2(account_model, id_transaction, date, journal, libelle, montant, frais_versement=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_ORDINAIRE)])[0]
     compte_frais_versement = account_model.search([('code', '=', CODE_COMPTE_FRAIS_VERSEMENT)])[0]
@@ -388,8 +510,8 @@ def ecriture_comptable_7_2(account_model, id_transaction, date, journal, libelle
         'line_ids': [
             (0, 0, {'debit': 0, 'credit': montant , 'account_id': compte_origine, 'name': libelle}),
             (0, 0, {'debit': montant, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
-            (0, 0, {'debit': 0, 'credit': 0,'account_id': compte_frais_versement, 'name': libelle}),
-            (0, 0, {'debit': 0, 'credit': 0,'account_id': compte_commission_partenaire_versment, 'name': libelle}),
+            (0, 0, {'debit': 0, 'credit': frais_versement,'account_id': compte_frais_versement, 'name': libelle}),
+            (0, 0, {'debit': frais_versement, 'credit': 0,'account_id': compte_commission_partenaire_versment, 'name': libelle}),
         ]
     }
     return transaction
@@ -421,11 +543,11 @@ def ecriture_comptable_8_1(account_model, id_transaction, date, journal, libelle
 
 # Ecriture comptable 8.2    Alimentation du solde commerçant Rimcash via une agence (recharge)
 
-def ecriture_comptable_8_2(account_model, id_transaction, date, journal, libelle, montant):
+def ecriture_comptable_8_2(account_model, id_transaction, date, journal, libelle, montant, frais_versement=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_CLIENT_COMMERCANTS)])[0]
     compte_frais_versement = account_model.search([('code', '=', CODE_COMPTE_FRAIS_VERSEMENT)])[0]
-    compte_commission_partenaire_versment = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_PARTENAIRE_VERSEMENT)])[0]
+    compte_commission_partenaire_versement = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_PARTENAIRE_VERSEMENT)])[0]
 
     transaction = {
         'ref': id_transaction,
@@ -434,8 +556,8 @@ def ecriture_comptable_8_2(account_model, id_transaction, date, journal, libelle
         'line_ids': [
             (0, 0, {'debit': 0, 'credit': montant , 'account_id': compte_origine, 'name': libelle}),
             (0, 0, {'debit': montant, 'credit': 0,'account_id': compte_beneficiaire, 'name': libelle}),
-            (0, 0, {'debit': 0, 'credit': 0,'account_id': compte_frais_versement, 'name': libelle}),
-            (0, 0, {'debit': 0, 'credit': 0,'account_id': compte_commission_partenaire_versment, 'name': libelle}),
+            (0, 0, {'debit': 0, 'credit': frais_versement,'account_id': compte_frais_versement, 'name': libelle}),
+            (0, 0, {'debit': frais_versement, 'credit': 0,'account_id': compte_commission_partenaire_versement, 'name': libelle}),
         ]
     }
     return transaction
@@ -699,7 +821,7 @@ def ecriture_comptable_17_1(account_model, id_transaction, date, journal, libell
 
 # Ecriture comptable 17.2    Paiement de facture par un client RimCash à un facturier via une agence
 
-def ecriture_comptable_17_2(account_model, id_transaction, date, journal, libelle, montant, commission=0,commission_partenaire=0, taxe=0):
+def ecriture_comptable_17_2(account_model, id_transaction, date, journal, libelle, montant, commission=0, taxe=0, commission_partenaire=0):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CAISSE_AGENCES_PARTENAIRE)])[0]
     compte_beneficiaire = account_model.search([('code', '=', CODE_COMPTE_FACTURIERS)])[0]
     compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_FACTURIER)])[0]
@@ -763,7 +885,7 @@ def ecriture_comptable_19_1(account_model, id_transaction, date, journal, libell
 
 # Ecriture comptable 20.1     Paiement de plusieurs clients RimCash par un client RimCash Pro (Entreprise) 
 
-def ecriture_comptable_20_1(account_model, id_transaction, date, journal, libelle, montant,commission=0,taxe=0,recepteurs=[]):
+def ecriture_comptable_20_1(account_model, id_transaction, date, journal, libelle, montant, commission=0, taxe=0, recepteurs=[]):
     compte_origine = account_model.search([('code', '=', CODE_COMPTE_CLIENT_PRO)])[0]
     compte_commision = account_model.search([('code', '=', CODE_COMPTE_COMMISSION_MULTIPLE)])[0]
     compte_taxe = account_model.search([('code', '=', CODE_COMPTE_TAXE)])[0]
